@@ -51,6 +51,12 @@ class PlaybackRateModule extends Module
 			PlayState.instance.playbackRate = scale;
 	}
 
+	override function onCreate(event):Void
+	{
+		adjustTimeScale(1.0);
+		super.onCreate(event);
+	}
+
 	override function onStateChangeEnd(event):Void
 	{
 		var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
@@ -105,5 +111,11 @@ class PlaybackRateModule extends Module
 			PlayState.instance.get_currentChart().scrollSpeed *= TIMESCALE;
 
 		super.onSongRetry(event);
+	}
+
+	override function onDestroy(event):Void
+	{
+		adjustTimeScale(1.0);
+		super.onDestroy(event);
 	}
 }
