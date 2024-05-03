@@ -20,7 +20,7 @@ class DebugDisplayModule extends Module
 
 	override function onDestroy(event):Void
 	{
-		super.onUpdate(event);
+		super.onDestroy(event);
 		Main.fpsCounter.visible = true;
 	}
 }
