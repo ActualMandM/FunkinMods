@@ -1,0 +1,109 @@
+import Std;
+import flixel.FlxG;
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+import funkin.play.scoring.Scoring;
+
+/* TODO:
+ * Fix hot-loading breaking scroll speed adjustment
+ * Add configurable options in-game
+ */
+class PlaybackRateModule extends Module
+{
+	// Modify these values to your preference
+	var TIMESCALE:float = 1.25;
+	var ADJUST_SCROLL:Bool = true;
+
+	// Everything else below is the code!
+
+	function new()
+	{
+		super("PlaybackRate");
+	}
+
+	function adjustTimeScale(scale:Float):Void
+	{
+		FlxG.timeScale = scale;
+
+		// PBOT1 (0.3.0)
+		Scoring.PBOT1_PERFECT_THRESHOLD = 5.0 * scale;
+		Scoring.PBOT1_MISS_THRESHOLD = 160.0 * scale;
+		Scoring.PBOT1_KILLER_THRESHOLD = 12.5 * scale;
+		Scoring.PBOT1_SICK_THRESHOLD = 45.0 * scale;
+		Scoring.PBOT1_GOOD_THRESHOLD = 90.0 * scale;
+		Scoring.PBOT1_BAD_THRESHOLD = 135.0 * scale;
+		Scoring.PBOT1_SHIT_THRESHOLD = 160.0 * scale;
+
+		// Legacy (Pre-0.2.8)
+		Scoring.LEGACY_HIT_WINDOW = 166.66666666666666 * scale;
+		Scoring.LEGACY_SICK_THRESHOLD = 0.2 * scale;
+		Scoring.LEGACY_GOOD_THRESHOLD = 0.75 * scale;
+		Scoring.LEGACY_BAD_THRESHOLD = 0.9 * scale;
+		Scoring.LEGACY_SHIT_THRESHOLD = 1.0 * scale;
+
+		// Week 7 (0.2.8)
+		Scoring.WEEK7_HIT_WINDOW = Scoring.LEGACY_HIT_WINDOW;
+		Scoring.WEEK7_BAD_THRESHOLD = 0.8 * scale;
+		Scoring.WEEK7_GOOD_THRESHOLD = 0.55 * scale;
+		Scoring.WEEK7_SICK_THRESHOLD = 0.2 * scale;
+
+		if (PlayState.instance != null)
+			PlayState.instance.playbackRate = scale;
+	}
+
+	override function onStateChangeEnd(event):Void
+	{
+		var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
+		adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
+
+		super.onStateChangeEnd(event);
+	}
+
+	override function onCountdownStart(event):Void
+	{
+		if (ADJUST_SCROLL)
+			PlayState.instance.get_currentChart().scrollSpeed /= TIMESCALE;
+
+		super.onCountdownStart(event);
+	}
+
+	override function onCountdownEnd(event):Void
+	{
+		adjustTimeScale(TIMESCALE);
+		super.onCountdownEnd(event);
+	}
+
+	override function onPause(event):Void
+	{
+		adjustTimeScale(1.0);
+		super.onPause(event);
+	}
+
+	override function onResume(event):Void
+	{
+		adjustTimeScale(TIMESCALE);
+		super.onResume(event);
+	}
+
+	override function onSongEnd(event):Void
+	{
+		adjustTimeScale(1.0);
+		super.onPause(event);
+	}
+
+	override function onGameOver(event):Void
+	{
+		adjustTimeScale(1.0);
+		super.onGameOver(event);
+	}
+
+	override function onSongRetry(event):Void
+	{
+		adjustTimeScale(TIMESCALE);
+
+		if (ADJUST_SCROLL)
+			PlayState.instance.get_currentChart().scrollSpeed *= TIMESCALE;
+
+		super.onSongRetry(event);
+	}
+}

@@ -1,0 +1,21 @@
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+
+class BotPlayModule extends Module
+{
+	function new()
+	{
+		super("BotPlay");
+	}
+
+	override function onStateChangeEnd(event):Void
+	{
+		super.onStateChangeEnd(event);
+
+		if (PlayState.instance != null)
+		{
+			PlayState.instance.isPracticeMode = true;
+			PlayState.instance.isBotPlayMode = true;
+		}
+	}
+}
