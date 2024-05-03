@@ -1,0 +1,26 @@
+import Main;
+import funkin.Preferences;
+import funkin.modding.module.Module;
+
+class DebugDisplayModule extends Module
+{
+	function new()
+	{
+		super("DebugDisplay");
+	}
+
+	override function onUpdate(event):Void
+	{
+		super.onUpdate(event);
+
+		// Is this efficient? No.
+		// Does it work? Yes.
+		Main.fpsCounter.visible = Preferences.debugDisplay;
+	}
+
+	override function onDestroy(event):Void
+	{
+		super.onUpdate(event);
+		Main.fpsCounter.visible = true;
+	}
+}
