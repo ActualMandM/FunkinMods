@@ -65,12 +65,12 @@ class PlaybackRateModule extends Module
 		super.onStateChangeEnd(event);
 	}
 
-	override function onCountdownStart(event):Void
+	override function onSongLoaded(event):Void
 	{
 		if (ADJUST_SCROLL)
 			PlayState.instance.get_currentChart().scrollSpeed /= TIMESCALE;
 
-		super.onCountdownStart(event);
+		super.onSongLoaded(event);
 	}
 
 	override function onCountdownEnd(event):Void
@@ -94,7 +94,7 @@ class PlaybackRateModule extends Module
 	override function onSongEnd(event):Void
 	{
 		adjustTimeScale(1.0);
-		super.onPause(event);
+		super.onSongEnd(event);
 	}
 
 	override function onGameOver(event):Void
