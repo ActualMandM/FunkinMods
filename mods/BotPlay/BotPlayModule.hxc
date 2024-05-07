@@ -5,7 +5,7 @@ class BotPlayModule extends Module
 {
 	function new()
 	{
-		super("BotPlay");
+		super("BotPlayModule");
 	}
 
 	override function onStateChangeEnd(event):Void

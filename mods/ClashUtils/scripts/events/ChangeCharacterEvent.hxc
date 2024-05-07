@@ -1,0 +1,61 @@
+import funkin.modding.module.ModuleHandler;
+import funkin.play.character.CharacterDataParser;
+import funkin.play.character.CharacterType;
+import funkin.play.event.SongEvent;
+
+class ChangeCharacterEvent extends SongEvent
+{
+	var targetMap:Map<String, CharacterType> = [
+		"Player" => CharacterType.BF,
+		"Opponent" => CharacterType.DAD,
+		"Girlfriend" => CharacterType.GF
+	];
+
+	// For some reason initalizing a blank map causes an error
+	var characterMap:Map<String, String> = ["Boyfriend" => "bf"];
+
+	function new()
+	{
+		super("ChangeCharacter");
+	}
+
+	override function getTitle()
+	{
+		return "Change Character";
+	}
+
+	override function getEventSchema()
+	{
+		characterMap.clear();
+
+		// Fetch all the characters in the game and add them to the map
+		for (characterId in CharacterDataParser.listCharacterIds())
+		{
+			characterMap.set(CharacterDataParser.fetchCharacterData(characterId).name, characterId);
+		}
+
+		return [
+			{
+				name: "target",
+				title: "Target",
+				type: "enum",
+				defaultValue: CharacterType.BF,
+				keys: targetMap,
+			},
+			{
+				name: "char",
+				title: "Character",
+				type: "enum",
+				defaultValue: "bf",
+				keys: characterMap,
+			}
+		];
+	}
+
+	override function handleEvent(event)
+	{
+		// Call the changeCharacter function in the module
+		var module = ModuleHandler.getModule('ChangeCharacterModule');
+		module.scriptCall('changeCharacter', [event.value.char, event.value.target]);
+	}
+}

@@ -6,7 +6,7 @@ class DebugDisplayModule extends Module
 {
 	function new()
 	{
-		super("DebugDisplay");
+		super("DebugDisplayModule");
 	}
 
 	override function onUpdate(event):Void

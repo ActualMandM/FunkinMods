@@ -18,7 +18,7 @@ class PlaybackRateModule extends Module
 
 	function new()
 	{
-		super("PlaybackRate");
+		super("PlaybackRateModule");
 	}
 
 	function adjustTimeScale(scale:Float):Void

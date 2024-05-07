@@ -1,16 +1,54 @@
+import Std;
 import funkin.Paths;
 import funkin.graphics.FunkinSprite;
+import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.character.CharacterDataParser;
 import funkin.play.character.CharacterType;
 import funkin.play.song.Song;
+import funkin.play.stage.Stage;
 
-class ChangeCharacter
+class ChangeCharacterModule extends Module
 {
-	/*
-	 * This will reset the characters back to
-	 * what they were at the start of the song.
-	 */
+	function new()
+	{
+		super("ChangeCharacterModule");
+	}
+
+	var cachedCharacters:Bool = false;
+
+	function onStateChangeEnd(event)
+	{
+		super.onStateChangeEnd(event);
+
+		if (Std.isOfType(event.targetState, PlayState))
+		{
+			return;
+		}
+
+		cachedCharacters = false;
+	}
+
+	override function onSongLoaded(event):Void
+	{
+		super.onSongLoaded(event);
+
+		if (!cachedCharacters || PlayState.instance.isChartingMode)
+		{
+			for (event in PlayState.instance.currentChart.getEvents())
+			{
+				if (event.eventKind == "ChangeCharacter")
+				{
+					// Cache character assets so the game doesn't stutter
+					var characterData = CharacterDataParser.fetchCharacterData(event.value.char);
+					FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
+				}
+			}
+
+			cachedCharacters = true;
+		}
+	}
+
 	override function onSongRetry(event):Void
 	{
 		super.onSongRetry(event);
@@ -18,6 +56,7 @@ class ChangeCharacter
 		var stage:Stage = PlayState.instance.currentStage;
 		var chart:Song = PlayState.instance.currentChart;
 
+		// Reset characters to their default state
 		var boyfriendId:String = chart.characters.player;
 		var dadId:String = chart.characters.opponent;
 		var girlfriendId:String = chart.characters.girlfriend;
@@ -39,19 +78,6 @@ class ChangeCharacter
 	}
 
 	/*
-	 * This function should be used during the
-	 * setup of the song to cache their assets.
-	 *
-	 * Otherwise the game stutters when the
-	 * character switches, which is not ideal.
-	 */
-	function cacheCharacter(characterId:String):Void
-	{
-		var characterData = CharacterDataParser.fetchCharacterData(characterId);
-		FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
-	}
-
-	/*
 	 * This function does the actual character changing itself.
 	 * Pretty simple as the game does all the heavy-lifting for us.
 	 *
@@ -68,6 +94,7 @@ class ChangeCharacter
 			{
 				if (stage.getBoyfriend().characterId != characterId)
 				{
+					trace("Changing player to " + characterId);
 					var boyfriend = stage.getBoyfriend(true);
 					boyfriend = CharacterDataParser.fetchCharacter(characterId);
 					boyfriend.characterType = CharacterType.BF;
@@ -79,6 +106,7 @@ class ChangeCharacter
 			{
 				if (stage.getGirlfriend().characterId != characterId)
 				{
+					trace("Changing girlfriend to " + characterId);
 					var girlfriend = stage.getGirlfriend(true);
 					girlfriend = CharacterDataParser.fetchCharacter(characterId);
 					girlfriend.characterType = CharacterType.GF;
@@ -90,6 +118,7 @@ class ChangeCharacter
 			{
 				if (stage.getDad().characterId != characterId)
 				{
+					trace("Changing opponent to " + characterId);
 					var dad = stage.getDad(true);
 					dad = CharacterDataParser.fetchCharacter(characterId);
 					dad.characterType = CharacterType.DAD;
