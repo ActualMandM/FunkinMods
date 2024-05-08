@@ -5,6 +5,10 @@
 		{
 			"name": "M&M",
 			"role": "Programmer"
+		},
+		{
+			"name": "digboye",
+			"role": "Mod Icon"
 		}
 	],
     "api_version": "0.1.0",
