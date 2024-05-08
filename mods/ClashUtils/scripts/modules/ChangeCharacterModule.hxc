@@ -79,7 +79,7 @@ class ChangeCharacterModule extends Module
 			changeCharacter(dadId, CharacterType.DAD);
 		}
 
-		if (stage.getGirlfriend().characterId != girlfriendId)
+		if (stage.getGirlfriend() != null && stage.getGirlfriend().characterId != girlfriendId)
 		{
 			changeCharacter(girlfriendId, CharacterType.GF);
 		}
