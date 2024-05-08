@@ -82,9 +82,6 @@ class ChangeCharacterModule extends Module
 	/*
 	 * This function does the actual character changing itself.
 	 * Pretty simple as the game does all the heavy-lifting for us.
-	 *
-	 * P.S. Funkin' Crew if you're reading:
-	 * pls make Stage.addCharacter() set characterType too thx <3
 	 */
 	function changeCharacter(characterId:String, characterType:CharacterType):Void
 	{

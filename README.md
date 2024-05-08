@@ -1,5 +1,5 @@
 # FunkinMods
-A repository hosting HScript code for [Friday Night Funkin'](https://ninja-muffin24.itch.io/funkin) mods.
+A repository hosting HScript code for [Friday Night Funkin'](https://github.com/FunkinCrew/funkin) mods.
 
 ## Index
 - [Bot Play](mods/BotPlay)
