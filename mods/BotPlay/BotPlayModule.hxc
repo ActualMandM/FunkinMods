@@ -2,6 +2,12 @@ import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 
+/**
+ * A module that force enables Bot Play and Practice Mode
+ * in PlayState when not in Charting Mode.
+ *
+ * @author M&M
+ */
 class BotPlayModule extends Module
 {
 	function new()
@@ -13,10 +19,10 @@ class BotPlayModule extends Module
 	{
 		super.onStateChangeEnd(event);
 
-		if (PlayState.instance != null)
+		if (PlayState.instance != null && !PlayState.instance.isChartingMode)
 		{
-			PlayState.instance.isPracticeMode = true;
 			PlayState.instance.isBotPlayMode = true;
+			PlayState.instance.isPracticeMode = true;
 		}
 	}
 }

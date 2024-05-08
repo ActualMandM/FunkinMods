@@ -5,8 +5,14 @@ import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
 
-/* TODO:
- * Add configurable options in-game
+/**
+ * A module that changes various values to recreate the
+ * Playback Rate feature that is present in various FNF engines.
+ *
+ * TODO:
+ * Add configurable options in-game.
+ *
+ * @author M&M
  */
 class PlaybackRateModule extends Module
 {

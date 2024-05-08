@@ -3,6 +3,12 @@ import funkin.Preferences;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 
+/**
+ * A module that changes Main.fpsCounter's visibility
+ * based on Preferences.debugDisplay.
+ *
+ * @author M&M
+ */
 class DebugDisplayModule extends Module
 {
 	function new()

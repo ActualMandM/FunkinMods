@@ -3,6 +3,12 @@ import funkin.play.character.CharacterDataParser;
 import funkin.play.character.CharacterType;
 import funkin.play.event.SongEvent;
 
+/**
+ * An event that sets up values necessary
+ * for changing characters mid-song.
+ *
+ * @author M&M
+ */
 class ChangeCharacterEvent extends SongEvent
 {
 	function new()

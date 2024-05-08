@@ -10,6 +10,12 @@ import funkin.play.character.CharacterType;
 import funkin.play.song.Song;
 import funkin.play.stage.Stage;
 
+/**
+ * A module that has all the code necessary
+ * to make mid-song character changes possible.
+ *
+ * @author M&M
+ */
 class ChangeCharacterModule extends Module
 {
 	function new()
@@ -79,7 +85,7 @@ class ChangeCharacterModule extends Module
 		}
 	}
 
-	/*
+	/**
 	 * This function does the actual character changing itself.
 	 * Pretty simple as the game does all the heavy-lifting for us.
 	 */
