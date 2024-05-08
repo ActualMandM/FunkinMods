@@ -1,0 +1,30 @@
+import flixel.FlxG;
+import funkin.modding.module.Module;
+
+/**
+ * A module that sets the game's draw and update framerates to
+ * your monitor's refresh rate, alongside diabling fixedTimestep.
+ *
+ * @author M&M
+ */
+class FramerateModule extends Module
+{
+	function new()
+	{
+		super("FramerateModule");
+	}
+
+	override function onCreate(event:ScriptEvent):Void
+	{
+		super.onCreate(event);
+		FlxG.updateFramerate = FlxG.drawFramerate = FlxG.stage.application.window.displayMode.refreshRate;
+		FlxG.fixedTimestep = false;
+	}
+
+	override function onDestroy(event:ScriptEvent):Void
+	{
+		super.onDestroy(event);
+		FlxG.updateFramerate = FlxG.drawFramerate = 144;
+		FlxG.fixedTimestep = true;
+	}
+}

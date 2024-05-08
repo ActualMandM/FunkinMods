@@ -1,0 +1,13 @@
+{
+    "title": "Fix Framerate",
+    "description": "Makes the game use your monitor's refresh rate, alongside disabling fixed timestep.\nThese prevent the game from slowing down when under 144 fps.",
+	"contributors": [
+		{
+			"name": "M&M",
+			"role": "Programmer"
+		}
+	],
+    "api_version": "0.1.0",
+    "mod_version": "1.0.0",
+    "license": "Apache 2.0"
+}
