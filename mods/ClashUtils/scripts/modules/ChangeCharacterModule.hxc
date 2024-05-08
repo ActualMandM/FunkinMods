@@ -1,8 +1,10 @@
 import Std;
 import funkin.Paths;
 import funkin.graphics.FunkinSprite;
+import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
+import funkin.play.character.BaseCharacter;
 import funkin.play.character.CharacterDataParser;
 import funkin.play.character.CharacterType;
 import funkin.play.song.Song;
@@ -17,7 +19,7 @@ class ChangeCharacterModule extends Module
 
 	var cachedCharacters:Bool = false;
 
-	function onStateChangeEnd(event)
+	function onStateChangeEnd(event:StateChangeScriptEvent):Void
 	{
 		super.onStateChangeEnd(event);
 
@@ -29,7 +31,7 @@ class ChangeCharacterModule extends Module
 		cachedCharacters = false;
 	}
 
-	override function onSongLoaded(event):Void
+	override function onSongLoaded(event:SongLoadScriptEvent):Void
 	{
 		super.onSongLoaded(event);
 
@@ -39,7 +41,7 @@ class ChangeCharacterModule extends Module
 			{
 				if (event.eventKind == "ChangeCharacter")
 				{
-					// Cache character assets so the game doesn't stutter
+					// Cache assets so the game doesn't stutter when character changes
 					var characterData = CharacterDataParser.fetchCharacterData(event.value.char);
 					FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
 				}
@@ -49,7 +51,7 @@ class ChangeCharacterModule extends Module
 		}
 	}
 
-	override function onSongRetry(event):Void
+	override function onSongRetry(event:ScriptEvent):Void
 	{
 		super.onSongRetry(event);
 
@@ -95,7 +97,7 @@ class ChangeCharacterModule extends Module
 				if (stage.getBoyfriend().characterId != characterId)
 				{
 					trace("Changing player to " + characterId);
-					var boyfriend = stage.getBoyfriend(true);
+					var boyfriend:BaseCharacter = stage.getBoyfriend(true);
 					boyfriend = CharacterDataParser.fetchCharacter(characterId);
 					boyfriend.characterType = CharacterType.BF;
 					stage.addCharacter(boyfriend, CharacterType.BF);
@@ -107,7 +109,7 @@ class ChangeCharacterModule extends Module
 				if (stage.getGirlfriend().characterId != characterId)
 				{
 					trace("Changing girlfriend to " + characterId);
-					var girlfriend = stage.getGirlfriend(true);
+					var girlfriend:BaseCharacter = stage.getGirlfriend(true);
 					girlfriend = CharacterDataParser.fetchCharacter(characterId);
 					girlfriend.characterType = CharacterType.GF;
 					stage.addCharacter(girlfriend, CharacterType.GF);
@@ -119,7 +121,7 @@ class ChangeCharacterModule extends Module
 				if (stage.getDad().characterId != characterId)
 				{
 					trace("Changing opponent to " + characterId);
-					var dad = stage.getDad(true);
+					var dad:BaseCharacter = stage.getDad(true);
 					dad = CharacterDataParser.fetchCharacter(characterId);
 					dad.characterType = CharacterType.DAD;
 					stage.addCharacter(dad, CharacterType.DAD);

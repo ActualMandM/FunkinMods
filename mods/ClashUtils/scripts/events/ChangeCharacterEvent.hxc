@@ -11,7 +11,7 @@ class ChangeCharacterEvent extends SongEvent
 		"Girlfriend" => CharacterType.GF
 	];
 
-	// For some reason initalizing a blank map causes an error
+	// For some reason, initializing a blank map causes an error
 	var characterMap:Map<String, String> = ["Boyfriend" => "bf"];
 
 	function new()
@@ -19,12 +19,14 @@ class ChangeCharacterEvent extends SongEvent
 		super("ChangeCharacter");
 	}
 
-	override function getTitle()
+	override function handleEvent(data:SongEventData):Void
 	{
-		return "Change Character";
+		// Call the changeCharacter function in the module
+		var module = ModuleHandler.getModule('ChangeCharacterModule');
+		module.scriptCall('changeCharacter', [data.value.char, data.value.target]);
 	}
 
-	override function getEventSchema()
+	override function getEventSchema():SongEventSchema
 	{
 		characterMap.clear();
 
@@ -52,10 +54,8 @@ class ChangeCharacterEvent extends SongEvent
 		];
 	}
 
-	override function handleEvent(event)
+	override function getTitle():String
 	{
-		// Call the changeCharacter function in the module
-		var module = ModuleHandler.getModule('ChangeCharacterModule');
-		module.scriptCall('changeCharacter', [event.value.char, event.value.target]);
+		return "Change Character";
 	}
 }

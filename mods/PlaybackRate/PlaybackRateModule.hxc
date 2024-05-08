@@ -1,5 +1,6 @@
 import Std;
 import flixel.FlxG;
+import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
@@ -25,7 +26,7 @@ class PlaybackRateModule extends Module
 	{
 		FlxG.timeScale = scale;
 
-		// PBOT1 (0.3.0)
+		// PBOT1 (Points Based On Timing v1)
 		Scoring.PBOT1_PERFECT_THRESHOLD = 5.0 * scale;
 		Scoring.PBOT1_MISS_THRESHOLD = 160.0 * scale;
 		Scoring.PBOT1_KILLER_THRESHOLD = 12.5 * scale;
@@ -34,14 +35,14 @@ class PlaybackRateModule extends Module
 		Scoring.PBOT1_BAD_THRESHOLD = 135.0 * scale;
 		Scoring.PBOT1_SHIT_THRESHOLD = 160.0 * scale;
 
-		// Legacy (Pre-0.2.8)
+		// Legacy
 		Scoring.LEGACY_HIT_WINDOW = 166.66666666666666 * scale;
 		Scoring.LEGACY_SICK_THRESHOLD = 0.2 * scale;
 		Scoring.LEGACY_GOOD_THRESHOLD = 0.75 * scale;
 		Scoring.LEGACY_BAD_THRESHOLD = 0.9 * scale;
 		Scoring.LEGACY_SHIT_THRESHOLD = 1.0 * scale;
 
-		// Week 7 (0.2.8)
+		// Week 7
 		Scoring.WEEK7_HIT_WINDOW = Scoring.LEGACY_HIT_WINDOW;
 		Scoring.WEEK7_BAD_THRESHOLD = 0.8 * scale;
 		Scoring.WEEK7_GOOD_THRESHOLD = 0.55 * scale;
@@ -51,13 +52,13 @@ class PlaybackRateModule extends Module
 			PlayState.instance.playbackRate = scale;
 	}
 
-	override function onCreate(event):Void
+	override function onCreate(event:ScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
 		super.onCreate(event);
 	}
 
-	override function onStateChangeEnd(event):Void
+	override function onStateChangeEnd(event:StateChangeScriptEvent):Void
 	{
 		var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
 		adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
@@ -65,7 +66,7 @@ class PlaybackRateModule extends Module
 		super.onStateChangeEnd(event);
 	}
 
-	override function onSongLoaded(event):Void
+	override function onSongLoaded(event:SongLoadScriptEvent):Void
 	{
 		if (ADJUST_SCROLL)
 			PlayState.instance.currentChart.scrollSpeed /= TIMESCALE;
@@ -73,37 +74,37 @@ class PlaybackRateModule extends Module
 		super.onSongLoaded(event);
 	}
 
-	override function onCountdownEnd(event):Void
+	override function onCountdownEnd(event:CountdownScriptEvent):Void
 	{
 		adjustTimeScale(TIMESCALE);
 		super.onCountdownEnd(event);
 	}
 
-	override function onPause(event):Void
+	override function onPause(event:PauseScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
 		super.onPause(event);
 	}
 
-	override function onResume(event):Void
+	override function onResume(event:ScriptEvent):Void
 	{
 		adjustTimeScale(TIMESCALE);
 		super.onResume(event);
 	}
 
-	override function onSongEnd(event):Void
+	override function onSongEnd(event:ScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
 		super.onSongEnd(event);
 	}
 
-	override function onGameOver(event):Void
+	override function onGameOver(event:ScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
 		super.onGameOver(event);
 	}
 
-	override function onSongRetry(event):Void
+	override function onSongRetry(event:ScriptEvent):Void
 	{
 		adjustTimeScale(TIMESCALE);
 
@@ -113,7 +114,7 @@ class PlaybackRateModule extends Module
 		super.onSongRetry(event);
 	}
 
-	override function onDestroy(event):Void
+	override function onDestroy(event:ScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
 		super.onDestroy(event);

@@ -1,5 +1,6 @@
 import Main;
 import funkin.Preferences;
+import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 
 class DebugDisplayModule extends Module
@@ -9,7 +10,7 @@ class DebugDisplayModule extends Module
 		super("DebugDisplayModule");
 	}
 
-	override function onUpdate(event):Void
+	override function onUpdate(event:UpdateScriptEvent):Void
 	{
 		super.onUpdate(event);
 
@@ -18,7 +19,7 @@ class DebugDisplayModule extends Module
 		Main.fpsCounter.visible = Preferences.debugDisplay;
 	}
 
-	override function onDestroy(event):Void
+	override function onDestroy(event:ScriptEvent):Void
 	{
 		super.onDestroy(event);
 		Main.fpsCounter.visible = true;

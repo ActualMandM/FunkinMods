@@ -1,3 +1,4 @@
+import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 
@@ -8,7 +9,7 @@ class BotPlayModule extends Module
 		super("BotPlayModule");
 	}
 
-	override function onStateChangeEnd(event):Void
+	override function onStateChangeEnd(event:StateChangeScriptEvent):Void
 	{
 		super.onStateChangeEnd(event);
 
