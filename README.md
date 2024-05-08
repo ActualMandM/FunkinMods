@@ -1,5 +1,5 @@
 # FunkinMods
-A repository hosting HScript code for [Friday Night Funkin'](https://github.com/FunkinCrew/funkin) mods.
+A repository hosting Polymod mods for [Friday Night Funkin'](https://github.com/FunkinCrew/funkin).
 
 ## Index
 - [Bot Play](mods/BotPlay)
@@ -7,3 +7,4 @@ A repository hosting HScript code for [Friday Night Funkin'](https://github.com/
 - [Fix Debug Display](mods/FixDebugDisplay)
 - [Fix Framerate](mods/FixFramerate)
 - [Playback Rate](mods/PlaybackRate)
+- [Results Styled Combo](mods/ResultsStyledCombo)

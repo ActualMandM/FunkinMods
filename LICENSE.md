@@ -1,3 +1,11 @@
+# FunkinMods
+
+The code in FunkinMods is licensed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
+
+Some assets in this repo are based off ones in `funkin.assets` and are thus subject to the [`funkin.assets` license](https://github.com/FunkinCrew/funkin.assets/blob/main/LICENSE.md).
+
+## Apache 2.0 License
+
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -186,7 +194,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright 2024 M&M
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

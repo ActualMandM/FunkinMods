@@ -1,0 +1,68 @@
+import funkin.Highscore;
+import funkin.graphics.FunkinSprite;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+import funkin.play.scoring.Scoring;
+
+/**
+ * A module that colors the numScore sprites
+ * according to the judgement that you were given.
+ *
+ * @author M&M
+ */
+class ResultsComboModule extends Module
+{
+	function new()
+	{
+		super("ResultsComboModule");
+	}
+
+	var ratingColors = [
+		"sick" => 0xFF89E59E,
+		"good" => 0xFF89C9E5,
+		"bad" => 0xFFE6CF8A,
+		"shit" => 0xFFE68C8A,
+		"miss" => 0xFFC68AE6
+	];
+
+	var coloredNums:Bool = false;
+	var daRating:Bool = "sick";
+
+	override function onNoteHit(event:HitNoteScriptEvent)
+	{
+		super.onNoteHit(event);
+
+		if (!event.note.noteData.getMustHitNote())
+		{
+			return;
+		}
+
+		var strumTime:Float = PlayState.instance.conductorInUse.songPosition-event.note.strumTime;
+		daRating = Scoring.judgeNote(strumTime, "PBOT1");
+
+		coloredNums = false;
+	}
+
+	override function onUpdate(event:ScriptEvent)
+	{
+		super.onUpdate(event);
+
+		var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
+
+		if (canColor && PlayState.instance != null && !coloredNums)
+		{
+			var popUpMembers = PlayState.instance.comboPopUps.members;
+
+			for (i in popUpMembers.length - 3...popUpMembers.length)
+			{
+				if (Type.getClass(popUpMembers[i]) == Type.resolveClass(FunkinSprite))
+				{
+					popUpMembers[i].color = ratingColors.get(daRating);
+				}
+			}
+
+			coloredNums = true;
+		}
+	}
+}

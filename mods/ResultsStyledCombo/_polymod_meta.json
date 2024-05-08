@@ -1,0 +1,17 @@
+{
+	"title": "Results Styled Combo",
+	"description": "Makes the combo in-game stylized after how the tallies in results are.",
+	"contributors": [
+		{
+			"name": "M&M",
+			"role": "Programming"
+		},
+		{
+			"name": "Funkin' Crew",
+			"role": "Assets"
+		}
+	],
+	"api_version": "0.1.0",
+	"mod_version": "1.0.0",
+	"license": "Apache 2.0, funkin.assets license"
+}
