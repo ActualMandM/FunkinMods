@@ -4,9 +4,9 @@ import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
-import funkin.util.Constants;
 
 /* TODO:
+ * Fix hot-loading breaking scroll speed adjustment
  * Add configurable options in-game
  */
 class PlaybackRateModule extends Module
@@ -15,10 +15,7 @@ class PlaybackRateModule extends Module
 	var TIMESCALE:float = 1.25;
 	var ADJUST_SCROLL:Bool = true;
 
-
-	////////////////////////////////////////
-	// Everything else below is the code! //
-	////////////////////////////////////////
+	// Everything else below is the code!
 
 	function new()
 	{
@@ -52,9 +49,7 @@ class PlaybackRateModule extends Module
 		Scoring.WEEK7_SICK_THRESHOLD = 0.2 * scale;
 
 		if (PlayState.instance != null)
-		{
 			PlayState.instance.playbackRate = scale;
-		}
 	}
 
 	override function onCreate(event:ScriptEvent):Void
@@ -63,24 +58,10 @@ class PlaybackRateModule extends Module
 		super.onCreate(event);
 	}
 
-	var originalScroll:Float = Constants.DEFAULT_SCROLLSPEED;
-
 	override function onStateChangeEnd(event:StateChangeScriptEvent):Void
 	{
 		var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
 		adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
-
-		if (ADJUST_SCROLL)
-		{
-			if (isPlayState && originalScroll == Constants.DEFAULT_SCROLLSPEED)
-			{
-				originalScroll = PlayState.instance.currentChart.scrollSpeed;
-			}
-			else if (!isPlayState)
-			{
-				originalScroll = Constants.DEFAULT_SCROLLSPEED;
-			}
-		}
 
 		super.onStateChangeEnd(event);
 	}
@@ -88,9 +69,7 @@ class PlaybackRateModule extends Module
 	override function onSongLoaded(event:SongLoadScriptEvent):Void
 	{
 		if (ADJUST_SCROLL)
-		{
-			PlayState.instance.currentChart.scrollSpeed = originalScroll / TIMESCALE;
-		}
+			PlayState.instance.currentChart.scrollSpeed /= TIMESCALE;
 
 		super.onSongLoaded(event);
 	}
@@ -130,9 +109,7 @@ class PlaybackRateModule extends Module
 		adjustTimeScale(TIMESCALE);
 
 		if (ADJUST_SCROLL)
-		{
-			PlayState.instance.currentChart.scrollSpeed = originalScroll * TIMESCALE;
-		}
+			PlayState.instance.currentChart.scrollSpeed *= TIMESCALE;
 
 		super.onSongRetry(event);
 	}
@@ -140,12 +117,6 @@ class PlaybackRateModule extends Module
 	override function onDestroy(event:ScriptEvent):Void
 	{
 		adjustTimeScale(1.0);
-
-		if (ADJUST_SCROLL && PlayState.instance != null)
-		{
-			PlayState.instance.currentChart.scrollSpeed = originalScroll;
-		}
-
 		super.onDestroy(event);
 	}
 }
