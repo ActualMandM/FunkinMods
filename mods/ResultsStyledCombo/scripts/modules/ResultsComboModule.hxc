@@ -26,8 +26,8 @@ class ResultsComboModule extends Module
 		"miss" => 0xFFC68AE6
 	];
 
-	var coloredNums:Bool = false;
-	var daRating:Bool = "sick";
+	var coloredCombo:Bool = false;
+	var daRating:Bool = "miss";
 
 	override function onNoteHit(event:HitNoteScriptEvent)
 	{
@@ -39,9 +39,9 @@ class ResultsComboModule extends Module
 		}
 
 		var strumTime:Float = PlayState.instance.conductorInUse.songPosition-event.note.strumTime;
-		daRating = Scoring.judgeNote(strumTime, "PBOT1");
+		daRating = Scoring.judgeNote(strumTime); // No need to specify PBOT1, its the default
 
-		coloredNums = false;
+		coloredCombo = false;
 	}
 
 	override function onUpdate(event:ScriptEvent)
@@ -50,11 +50,11 @@ class ResultsComboModule extends Module
 
 		var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
 
-		if (canColor && PlayState.instance != null && !coloredNums)
+		if (canColor && PlayState.instance != null && !coloredCombo)
 		{
 			var popUpMembers = PlayState.instance.comboPopUps.members;
 
-			for (i in popUpMembers.length - 3...popUpMembers.length)
+			for (i in (popUpMembers.length - 3)...popUpMembers.length)
 			{
 				if (Type.getClass(popUpMembers[i]) == Type.resolveClass(FunkinSprite))
 				{
@@ -62,7 +62,7 @@ class ResultsComboModule extends Module
 				}
 			}
 
-			coloredNums = true;
+			coloredCombo = true;
 		}
 	}
 }

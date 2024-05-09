@@ -9,6 +9,10 @@
 		{
 			"name": "digboye",
 			"role": "Mod Icon"
+		},
+		{
+			"name": "Funkin' Crew",
+			"role": "Assets"
 		}
 	],
     "api_version": "0.1.0",
