@@ -3,7 +3,6 @@ import funkin.graphics.FunkinSprite;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
-import funkin.play.scoring.Scoring;
 
 /**
  * A module that colors the numScore sprites
@@ -38,9 +37,7 @@ class ResultsComboModule extends Module
 			return;
 		}
 
-		var strumTime:Float = PlayState.instance.conductorInUse.songPosition-event.note.strumTime;
-		daRating = Scoring.judgeNote(strumTime); // No need to specify PBOT1, its the default
-
+		daRating = event.judgement;
 		coloredCombo = false;
 	}
 
