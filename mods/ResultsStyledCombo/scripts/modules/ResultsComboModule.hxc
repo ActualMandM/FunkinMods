@@ -27,7 +27,7 @@ class ResultsComboModule extends Module
 	];
 
 	var coloredCombo:Bool = false;
-	var daRating:Bool = "miss";
+	var daRating:String = "sick";
 
 	override function onNoteHit(event:HitNoteScriptEvent)
 	{
