@@ -1,0 +1,36 @@
+import funkin.graphics.FunkinSprite;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+
+/**
+ * A module that deletes previous comboPopUps
+ * sprites whenever a note is hit.
+ *
+ * @author M&M
+ */
+class ComboStackModule extends Module
+{
+	function new()
+	{
+		super("ComboStackModule");
+	}
+
+	override function onNoteHit(event:HitNoteScriptEvent)
+	{
+		super.onNoteHit(event);
+
+		if (!event.note.noteData.getMustHitNote())
+		{
+			return;
+		}
+
+		for (member in PlayState.instance.comboPopUps.members)
+		{
+			if (Type.getClass(member) == Type.resolveClass(FunkinSprite))
+			{
+				member.destroy();
+			}
+		}
+	}
+}
