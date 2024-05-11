@@ -11,7 +11,7 @@ import funkin.play.event.SongEvent;
  */
 class ChangeCharacterEvent extends SongEvent
 {
-	function new()
+	function new():Void
 	{
 		super("ChangeCharacter");
 	}

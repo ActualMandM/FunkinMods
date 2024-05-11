@@ -11,12 +11,12 @@ import funkin.play.PlayState;
  */
 class ComboStackModule extends Module
 {
-	function new()
+	function new():Void
 	{
 		super("ComboStackModule");
 	}
 
-	override function onNoteHit(event:HitNoteScriptEvent)
+	override function onNoteHit(event:HitNoteScriptEvent):Void
 	{
 		super.onNoteHit(event);
 

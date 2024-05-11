@@ -11,7 +11,7 @@ class FramerateModule extends Module
 {
 	var FRAMERATE:Int = FlxG.stage.application.window.displayMode.refreshRate;
 
-	function new()
+	function new():Void
 	{
 		super("FramerateModule");
 	}

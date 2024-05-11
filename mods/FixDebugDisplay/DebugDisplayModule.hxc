@@ -11,7 +11,7 @@ import funkin.modding.module.Module;
  */
 class DebugDisplayModule extends Module
 {
-	function new()
+	function new():Void
 	{
 		super("DebugDisplayModule");
 	}

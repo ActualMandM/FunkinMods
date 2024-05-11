@@ -10,7 +10,7 @@ import funkin.play.PlayState;
  */
 class BotPlayModule extends Module
 {
-	function new()
+	function new():Void
 	{
 		super("BotPlayModule");
 	}
