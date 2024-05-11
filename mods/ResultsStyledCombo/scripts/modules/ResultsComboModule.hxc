@@ -32,7 +32,7 @@ class ResultsComboModule extends Module
 	{
 		super.onNoteHit(event);
 
-		if (!event.note.noteData.getMustHitNote())
+		if (PlayState.instance == null || !event.note.noteData.getMustHitNote())
 		{
 			return;
 		}

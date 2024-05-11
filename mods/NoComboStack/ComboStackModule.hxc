@@ -20,12 +20,14 @@ class ComboStackModule extends Module
 	{
 		super.onNoteHit(event);
 
-		if (!event.note.noteData.getMustHitNote())
+		var state = PlayState.instance;
+
+		if (state == null || !event.note.noteData.getMustHitNote())
 		{
 			return;
 		}
 
-		for (member in PlayState.instance.comboPopUps.members)
+		for (member in state.comboPopUps.members)
 		{
 			if (Type.getClass(member) == Type.resolveClass(FunkinSprite))
 			{
