@@ -1,3 +1,4 @@
+import Std;
 import funkin.Highscore;
 import funkin.graphics.FunkinSprite;
 import funkin.modding.events.ScriptEvent;
@@ -53,7 +54,7 @@ class ResultsComboModule extends Module
 
 			for (i in (popUpMembers.length - 3)...popUpMembers.length)
 			{
-				if (Type.getClass(popUpMembers[i]) == Type.resolveClass(FunkinSprite))
+				if (Std.isOfType(popUpMembers[i], FunkinSprite))
 				{
 					popUpMembers[i].color = ratingColors.get(daRating);
 				}

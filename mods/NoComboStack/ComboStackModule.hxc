@@ -1,3 +1,4 @@
+import Std;
 import funkin.graphics.FunkinSprite;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
@@ -29,7 +30,7 @@ class ComboStackModule extends Module
 
 		for (member in state.comboPopUps.members)
 		{
-			if (Type.getClass(member) == Type.resolveClass(FunkinSprite))
+			if (Std.isOfType(member, FunkinSprite))
 			{
 				member.destroy();
 			}
