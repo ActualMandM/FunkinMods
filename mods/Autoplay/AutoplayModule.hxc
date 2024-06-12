@@ -61,17 +61,15 @@ class AutoplayModule extends Module
 			{
 				if (Conductor.instance.songPosition >= note.time)
 				{
-					var curNote:SongNoteData = note;
-
-					if (holdData[curNote.data] == 0)
+					if (holdData[note.data] == 0)
 					{
 						pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
 					}
 
-					if (curNote.length <= 0 || holdData[curNote.data] >= curNote.length)
+					if (note.length <= 0 || holdData[note.data] >= note.length)
 					{
-						holdData[curNote.data] = 0;
-						playerNotes.remove(curNote);
+						holdData[note.data] = 0;
+						playerNotes.remove(note);
 
 						new FlxTimer().start(0.25, function(timer:FlxTimer)
 						{
@@ -80,7 +78,7 @@ class AutoplayModule extends Module
 					}
 					else
 					{
-						holdData[curNote.data] += (event.elapsed * 1000);
+						holdData[note.data] += (event.elapsed * 1000);
 					}
 				}
 			}
