@@ -2,7 +2,7 @@
 A repository hosting Polymod mods for [Friday Night Funkin'](https://github.com/FunkinCrew/funkin).
 
 ## Index
-- [Bot Play](mods/BotPlay)
+- [Autoplay](mods/Autoplay)
 - [ClashUtils](mods/ClashUtils)
 - [Fix Debug Display](mods/FixDebugDisplay)
 - [Fix Framerate](mods/FixFramerate)
