@@ -27,7 +27,7 @@ class ResultsComboModule extends Module
 	];
 
 	var coloredCombo:Bool = false;
-	var daRating:String = "sick";
+	var daRating:String = "perfect";
 
 	override function onNoteHit(event:HitNoteScriptEvent):Void
 	{
@@ -48,11 +48,11 @@ class ResultsComboModule extends Module
 
 		var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
 
-		if (canColor && PlayState.instance != null && !coloredCombo)
+		if (PlayState.instance != null && canColor && !coloredCombo)
 		{
 			var popUpMembers = PlayState.instance.comboPopUps.members;
 
-			for (i in (popUpMembers.length - 3)...popUpMembers.length)
+			for (i in (popUpMembers.length - getComboDigitCount())...popUpMembers.length)
 			{
 				if (Std.isOfType(popUpMembers[i], FunkinSprite))
 				{
@@ -62,5 +62,24 @@ class ResultsComboModule extends Module
 
 			coloredCombo = true;
 		}
+	}
+
+	function getComboDigitCount():Int
+	{
+		var seperatedScore:Array<Int> = [];
+		var tempCombo:Int = Highscore.tallies.combo;
+
+		while (tempCombo != 0)
+		{
+			seperatedScore.push(tempCombo % 10);
+			tempCombo = Std.int(tempCombo / 10);
+		}
+
+		while (seperatedScore.length < 3)
+		{
+			seperatedScore.push(0);
+		}
+
+		return seperatedScore.length;
 	}
 }
