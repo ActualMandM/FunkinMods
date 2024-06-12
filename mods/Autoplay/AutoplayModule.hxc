@@ -34,6 +34,7 @@ class AutoplayModule extends Module
 			state.isPracticeMode = true;
 
 			playerNotes = [];
+			holdData = [0, 0, 0, 0];
 
 			for (note in event.notes)
 			{
