@@ -1,0 +1,88 @@
+import flixel.util.FlxTimer;
+import funkin.Conductor;
+import funkin.input.PreciseInputManager;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+import funkin.play.scoring.Scoring;
+import funkin.util.Constants;
+
+/**
+ * A module that automatically presses notes
+ * in PlayState with perfect timing.
+ *
+ * @author M&M
+ */
+class AutoplayModule extends Module
+{
+	function new()
+	{
+		super("AutoplayModule");
+	}
+
+	var playerNotes:Array<SongNoteData> = [];
+	var holdData:Array<Float> = [0, 0, 0, 0];
+
+	override function onSongLoaded(event:SongLoadScriptEvent)
+	{
+		super.onSongLoaded(event);
+
+		var state:PlayState = PlayState.instance;
+
+		if (state != null && !state.isBotPlayMode)
+		{
+			state.isPracticeMode = true;
+
+			playerNotes = [];
+
+			for (note in event.notes)
+			{
+				if (note.getMustHitNote())
+				{
+					playerNotes.push(note);
+				}
+			}
+		}
+	}
+
+	override function onUpdate(event:ScriptEvent):Void
+	{
+		super.onUpdate(event);
+
+		var state:PlayState = PlayState.instance;
+
+		if (state != null && !state.isGamePaused && !state.isBotPlayMode && playerNotes.length > 0)
+		{
+			var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
+			var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
+
+			for (note in playerNotes)
+			{
+				if (Conductor.instance.songPosition >= note.time)
+				{
+					var curNote:SongNoteData = note;
+
+					if (holdData[curNote.data] == 0)
+					{
+						pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+					}
+
+					if (curNote.length <= 0 || holdData[curNote.data] >= curNote.length)
+					{
+						holdData[curNote.data] = 0;
+						playerNotes.remove(curNote);
+
+						new FlxTimer().start(event.elapsed * 25, function(timer:FlxTimer)
+						{
+							releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+						});
+					}
+					else
+					{
+						holdData[curNote.data] += (event.elapsed * 1000);
+					}
+				}
+			}
+		}
+	}
+}
