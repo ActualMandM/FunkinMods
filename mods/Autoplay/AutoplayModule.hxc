@@ -73,7 +73,7 @@ class AutoplayModule extends Module
 						holdData[curNote.data] = 0;
 						playerNotes.remove(curNote);
 
-						new FlxTimer().start(event.elapsed * 25, function(timer:FlxTimer)
+						new FlxTimer().start(0.25, function(timer:FlxTimer)
 						{
 							releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
 						});
