@@ -1,0 +1,55 @@
+import flixel.FlxG;
+import funkin.Paths;
+import funkin.audio.FunkinSound;
+import funkin.modding.events.ScriptEvent;
+import funkin.modding.module.Module;
+import funkin.play.PlayState;
+
+/**
+ * A module that plays a sound whenever a note is hit.
+ *
+ * @author M&M
+ */
+class SekaiHitSoundModule extends Module
+{
+  var HITSOUNDS = [
+    "perfect" => "perfect",
+    "killer" => "perfect",
+    "sick" => "perfect",
+    "good" => "great",
+    "bad" => "good",
+    "shit" => "good"
+  ];
+
+  function new()
+  {
+    super("SekaiHitSoundModule");
+  }
+
+  function onStateChangeEnd(event)
+  {
+    super.onStateChangeEnd(event);
+
+    if (!Std.isOfType(event.targetState, PlayState))
+    {
+      return;
+    }
+
+    for (audio in HITSOUNDS)
+    {
+      FlxG.sound.cache(Paths.sound('hitsound/' + audio));
+    }
+  }
+
+  override function onNoteHit(event:HitNoteScriptEvent):Void
+  {
+    super.onNoteHit(event);
+
+    if (PlayState.instance == null || !event.note.noteData.getMustHitNote() || !HITSOUNDS.exists(event.judgement))
+    {
+      return;
+    }
+
+    FunkinSound.playOnce(Paths.sound('hitsound/' + HITSOUNDS.get(event.judgement)), 0.8);
+  }
+}

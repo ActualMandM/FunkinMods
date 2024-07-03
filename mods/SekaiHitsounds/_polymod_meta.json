@@ -1,0 +1,17 @@
+{
+  "title": "Project Sekai Hitsounds",
+  "description": "Plays a hitsound from Project Sekai whenever you press a note.",
+  "contributors": [
+    {
+      "name": "M&M",
+      "role": "Programming"
+    },
+    {
+      "name": "SEGA, Colorful Palette",
+      "role": "Project Sekai"
+    }
+  ],
+  "api_version": "0.1.0",
+  "mod_version": "1.0.0",
+  "license": "Apache 2.0"
+}

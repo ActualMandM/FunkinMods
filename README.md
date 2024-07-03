@@ -8,4 +8,5 @@ A repository hosting Polymod mods for [Friday Night Funkin'](https://github.com/
 - [Fix Framerate](mods/FixFramerate)
 - [No Combo Stack](mods/NoComboStack)
 - [Playback Rate](mods/PlaybackRate)
+- [Project Sekai Hitsounds](mods/SekaiHitsounds)
 - [Results Styled Combo](mods/ResultsStyledCombo)
