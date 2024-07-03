@@ -1,13 +1,13 @@
 {
-    "title": "Autoplay",
-    "description": "Automatically plays the game with perfect timings.",
-	"contributors": [
-		{
-			"name": "M&M",
-			"role": "Programmer"
-		}
-	],
-    "api_version": "0.1.0",
-    "mod_version": "1.0.0",
-    "license": "Apache 2.0"
+  "title": "Autoplay",
+  "description": "Automatically plays the game with perfect timings.",
+  "contributors": [
+    {
+      "name": "M&M",
+      "role": "Programmer"
+    }
+  ],
+  "api_version": "0.1.0",
+  "mod_version": "1.0.0",
+  "license": "Apache 2.0"
 }

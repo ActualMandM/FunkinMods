@@ -18,120 +18,120 @@ import funkin.play.stage.Stage;
  */
 class ChangeCharacterModule extends Module
 {
-	function new():Void
-	{
-		super("ChangeCharacterModule");
-	}
+  function new():Void
+  {
+    super("ChangeCharacterModule");
+  }
 
-	var cachedCharacters:Bool = false;
+  var cachedCharacters:Bool = false;
 
-	function onStateChangeEnd(event:StateChangeScriptEvent):Void
-	{
-		super.onStateChangeEnd(event);
+  function onStateChangeEnd(event:StateChangeScriptEvent):Void
+  {
+    super.onStateChangeEnd(event);
 
-		if (Std.isOfType(event.targetState, PlayState))
-		{
-			return;
-		}
+    if (Std.isOfType(event.targetState, PlayState))
+    {
+      return;
+    }
 
-		cachedCharacters = false;
-	}
+    cachedCharacters = false;
+  }
 
-	override function onSongLoaded(event:SongLoadScriptEvent):Void
-	{
-		super.onSongLoaded(event);
+  override function onSongLoaded(event:SongLoadScriptEvent):Void
+  {
+    super.onSongLoaded(event);
 
-		if (!cachedCharacters || PlayState.instance.isChartingMode)
-		{
-			for (event in PlayState.instance.currentChart.getEvents())
-			{
-				if (event.eventKind == "ChangeCharacter")
-				{
-					// Cache assets so the game doesn't stutter when character changes
-					var characterData = CharacterDataParser.fetchCharacterData(event.value.char);
-					FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
-				}
-			}
+    if (!cachedCharacters || PlayState.instance.isChartingMode)
+    {
+      for (event in PlayState.instance.currentChart.getEvents())
+      {
+        if (event.eventKind == "ChangeCharacter")
+        {
+          // Cache assets so the game doesn't stutter when character changes
+          var characterData = CharacterDataParser.fetchCharacterData(event.value.char);
+          FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
+        }
+      }
 
-			cachedCharacters = true;
-		}
-	}
+      cachedCharacters = true;
+    }
+  }
 
-	override function onSongRetry(event:ScriptEvent):Void
-	{
-		super.onSongRetry(event);
+  override function onSongRetry(event:ScriptEvent):Void
+  {
+    super.onSongRetry(event);
 
-		var stage:Stage = PlayState.instance.currentStage;
-		var chart:Song = PlayState.instance.currentChart;
+    var stage:Stage = PlayState.instance.currentStage;
+    var chart:Song = PlayState.instance.currentChart;
 
-		// Reset characters to their default state
-		var boyfriendId:String = chart.characters.player;
-		var dadId:String = chart.characters.opponent;
-		var girlfriendId:String = chart.characters.girlfriend;
+    // Reset characters to their default state
+    var boyfriendId:String = chart.characters.player;
+    var dadId:String = chart.characters.opponent;
+    var girlfriendId:String = chart.characters.girlfriend;
 
-		if (stage.getBoyfriend().characterId != boyfriendId)
-		{
-			changeCharacter(boyfriendId, CharacterType.BF);
-		}
+    if (stage.getBoyfriend().characterId != boyfriendId)
+    {
+      changeCharacter(boyfriendId, CharacterType.BF);
+    }
 
-		if (stage.getDad().characterId != dadId)
-		{
-			changeCharacter(dadId, CharacterType.DAD);
-		}
+    if (stage.getDad().characterId != dadId)
+    {
+      changeCharacter(dadId, CharacterType.DAD);
+    }
 
-		if (stage.getGirlfriend() != null && stage.getGirlfriend().characterId != girlfriendId)
-		{
-			changeCharacter(girlfriendId, CharacterType.GF);
-		}
-	}
+    if (stage.getGirlfriend() != null && stage.getGirlfriend().characterId != girlfriendId)
+    {
+      changeCharacter(girlfriendId, CharacterType.GF);
+    }
+  }
 
-	/**
-	 * This function does the actual character changing itself.
-	 * Pretty simple as the game does all the heavy-lifting for us.
-	 */
-	function changeCharacter(characterId:String, characterType:CharacterType):Void
-	{
-		var stage:Stage = PlayState.instance.currentStage;
+  /**
+   * This function does the actual character changing itself.
+   * Pretty simple as the game does all the heavy-lifting for us.
+   */
+  function changeCharacter(characterId:String, characterType:CharacterType):Void
+  {
+    var stage:Stage = PlayState.instance.currentStage;
 
-		switch (characterType)
-		{
-			case CharacterType.BF:
-			{
-				if (stage.getBoyfriend().characterId != characterId)
-				{
-					trace("Changing player to " + characterId);
-					var boyfriend:BaseCharacter = stage.getBoyfriend(true);
-					boyfriend = CharacterDataParser.fetchCharacter(characterId);
-					boyfriend.characterType = CharacterType.BF;
-					stage.addCharacter(boyfriend, CharacterType.BF);
-				}
-			}
+    switch (characterType)
+    {
+      case CharacterType.BF:
+      {
+        if (stage.getBoyfriend().characterId != characterId)
+        {
+          trace("Changing player to " + characterId);
+          var boyfriend:BaseCharacter = stage.getBoyfriend(true);
+          boyfriend = CharacterDataParser.fetchCharacter(characterId);
+          boyfriend.characterType = CharacterType.BF;
+          stage.addCharacter(boyfriend, CharacterType.BF);
+        }
+      }
 
-			case CharacterType.GF:
-			{
-				if (stage.getGirlfriend().characterId != characterId)
-				{
-					trace("Changing girlfriend to " + characterId);
-					var girlfriend:BaseCharacter = stage.getGirlfriend(true);
-					girlfriend = CharacterDataParser.fetchCharacter(characterId);
-					girlfriend.characterType = CharacterType.GF;
-					stage.addCharacter(girlfriend, CharacterType.GF);
-				}
-			}
+      case CharacterType.GF:
+      {
+        if (stage.getGirlfriend().characterId != characterId)
+        {
+          trace("Changing girlfriend to " + characterId);
+          var girlfriend:BaseCharacter = stage.getGirlfriend(true);
+          girlfriend = CharacterDataParser.fetchCharacter(characterId);
+          girlfriend.characterType = CharacterType.GF;
+          stage.addCharacter(girlfriend, CharacterType.GF);
+        }
+      }
 
-			case CharacterType.DAD:
-			{
-				if (stage.getDad().characterId != characterId)
-				{
-					trace("Changing opponent to " + characterId);
-					var dad:BaseCharacter = stage.getDad(true);
-					dad = CharacterDataParser.fetchCharacter(characterId);
-					dad.characterType = CharacterType.DAD;
-					stage.addCharacter(dad, CharacterType.DAD);
-				}
-			}
-		}
+      case CharacterType.DAD:
+      {
+        if (stage.getDad().characterId != characterId)
+        {
+          trace("Changing opponent to " + characterId);
+          var dad:BaseCharacter = stage.getDad(true);
+          dad = CharacterDataParser.fetchCharacter(characterId);
+          dad.characterType = CharacterType.DAD;
+          stage.addCharacter(dad, CharacterType.DAD);
+        }
+      }
+    }
 
-		stage.refresh();
-	}
+    stage.refresh();
+  }
 }

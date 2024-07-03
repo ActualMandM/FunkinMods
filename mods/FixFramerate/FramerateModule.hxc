@@ -9,34 +9,34 @@ import funkin.modding.module.Module;
  */
 class FramerateModule extends Module
 {
-	var FRAMERATE:Int = FlxG.stage.application.window.displayMode.refreshRate;
+  var FRAMERATE:Int = FlxG.stage.application.window.displayMode.refreshRate;
 
-	function new():Void
-	{
-		super("FramerateModule");
-	}
+  function new():Void
+  {
+    super("FramerateModule");
+  }
 
-	override function onCreate(event:ScriptEvent):Void
-	{
-		super.onCreate(event);
-		FlxG.updateFramerate = FlxG.drawFramerate = FRAMERATE;
-		FlxG.fixedTimestep = false;
-	}
+  override function onCreate(event:ScriptEvent):Void
+  {
+    super.onCreate(event);
+    FlxG.updateFramerate = FlxG.drawFramerate = FRAMERATE;
+    FlxG.fixedTimestep = false;
+  }
 
-	override function onUpdate(event:ScriptEvent):Void
-	{
-		super.onUpdate(event);
+  override function onUpdate(event:ScriptEvent):Void
+  {
+    super.onUpdate(event);
 
-		if (FlxG.updateFramerate != FRAMERATE || FlxG.drawFramerate != FRAMERATE)
-		{
-			FlxG.updateFramerate = FlxG.drawFramerate = FRAMERATE;
-		}
-	}
+    if (FlxG.updateFramerate != FRAMERATE || FlxG.drawFramerate != FRAMERATE)
+    {
+      FlxG.updateFramerate = FlxG.drawFramerate = FRAMERATE;
+    }
+  }
 
-	override function onDestroy(event:ScriptEvent):Void
-	{
-		super.onDestroy(event);
-		FlxG.updateFramerate = FlxG.drawFramerate = 144;
-		FlxG.fixedTimestep = true;
-	}
+  override function onDestroy(event:ScriptEvent):Void
+  {
+    super.onDestroy(event);
+    FlxG.updateFramerate = FlxG.drawFramerate = 144;
+    FlxG.fixedTimestep = true;
+  }
 }

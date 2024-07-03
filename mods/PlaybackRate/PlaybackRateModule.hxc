@@ -16,121 +16,121 @@ import funkin.play.scoring.Scoring;
  */
 class PlaybackRateModule extends Module
 {
-	// Modify these values to your preference
-	var TIMESCALE:float = 1.25;
-	var ADJUST_SCROLL:Bool = true;
+  // Modify these values to your preference
+  var TIMESCALE:float = 1.25;
+  var ADJUST_SCROLL:Bool = true;
 
 
-	////////////////////////////////////////
-	// Everything else below is the code! //
-	////////////////////////////////////////
+  ////////////////////////////////////////
+  // Everything else below is the code! //
+  ////////////////////////////////////////
 
-	function new():Void
-	{
-		super("PlaybackRateModule");
-	}
+  function new():Void
+  {
+    super("PlaybackRateModule");
+  }
 
-	function adjustTimeScale(scale:Float):Void
-	{
-		FlxG.timeScale = scale;
+  function adjustTimeScale(scale:Float):Void
+  {
+    FlxG.timeScale = scale;
 
-		// PBOT1 (Points Based On Timing v1)
-		Scoring.PBOT1_PERFECT_THRESHOLD = 5.0 * scale;
-		Scoring.PBOT1_MISS_THRESHOLD = 160.0 * scale;
-		Scoring.PBOT1_KILLER_THRESHOLD = 12.5 * scale;
-		Scoring.PBOT1_SICK_THRESHOLD = 45.0 * scale;
-		Scoring.PBOT1_GOOD_THRESHOLD = 90.0 * scale;
-		Scoring.PBOT1_BAD_THRESHOLD = 135.0 * scale;
-		Scoring.PBOT1_SHIT_THRESHOLD = 160.0 * scale;
+    // PBOT1 (Points Based On Timing v1)
+    Scoring.PBOT1_PERFECT_THRESHOLD = 5.0 * scale;
+    Scoring.PBOT1_MISS_THRESHOLD = 160.0 * scale;
+    Scoring.PBOT1_KILLER_THRESHOLD = 12.5 * scale;
+    Scoring.PBOT1_SICK_THRESHOLD = 45.0 * scale;
+    Scoring.PBOT1_GOOD_THRESHOLD = 90.0 * scale;
+    Scoring.PBOT1_BAD_THRESHOLD = 135.0 * scale;
+    Scoring.PBOT1_SHIT_THRESHOLD = 160.0 * scale;
 
-		// Legacy
-		Scoring.LEGACY_HIT_WINDOW = 166.66666666666666 * scale;
-		Scoring.LEGACY_SICK_THRESHOLD = 0.2 * scale;
-		Scoring.LEGACY_GOOD_THRESHOLD = 0.75 * scale;
-		Scoring.LEGACY_BAD_THRESHOLD = 0.9 * scale;
-		Scoring.LEGACY_SHIT_THRESHOLD = 1.0 * scale;
+    // Legacy
+    Scoring.LEGACY_HIT_WINDOW = 166.66666666666666 * scale;
+    Scoring.LEGACY_SICK_THRESHOLD = 0.2 * scale;
+    Scoring.LEGACY_GOOD_THRESHOLD = 0.75 * scale;
+    Scoring.LEGACY_BAD_THRESHOLD = 0.9 * scale;
+    Scoring.LEGACY_SHIT_THRESHOLD = 1.0 * scale;
 
-		// Week 7
-		Scoring.WEEK7_HIT_WINDOW = Scoring.LEGACY_HIT_WINDOW;
-		Scoring.WEEK7_BAD_THRESHOLD = 0.8 * scale;
-		Scoring.WEEK7_GOOD_THRESHOLD = 0.55 * scale;
-		Scoring.WEEK7_SICK_THRESHOLD = 0.2 * scale;
+    // Week 7
+    Scoring.WEEK7_HIT_WINDOW = Scoring.LEGACY_HIT_WINDOW;
+    Scoring.WEEK7_BAD_THRESHOLD = 0.8 * scale;
+    Scoring.WEEK7_GOOD_THRESHOLD = 0.55 * scale;
+    Scoring.WEEK7_SICK_THRESHOLD = 0.2 * scale;
 
-		if (PlayState.instance != null)
-		{
-			PlayState.instance.playbackRate = scale;
-		}
-	}
+    if (PlayState.instance != null)
+    {
+      PlayState.instance.playbackRate = scale;
+    }
+  }
 
-	override function onCreate(event:ScriptEvent):Void
-	{
-		adjustTimeScale(1.0);
-		super.onCreate(event);
-	}
+  override function onCreate(event:ScriptEvent):Void
+  {
+    adjustTimeScale(1.0);
+    super.onCreate(event);
+  }
 
-	override function onStateChangeEnd(event:StateChangeScriptEvent):Void
-	{
-		var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
-		adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
+  override function onStateChangeEnd(event:StateChangeScriptEvent):Void
+  {
+    var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
+    adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
 
-		super.onStateChangeEnd(event);
-	}
+    super.onStateChangeEnd(event);
+  }
 
-	override function onSongLoaded(event:SongLoadScriptEvent):Void
-	{
-		adjustTimeScale(TIMESCALE);
+  override function onSongLoaded(event:SongLoadScriptEvent):Void
+  {
+    adjustTimeScale(TIMESCALE);
 
-		if (ADJUST_SCROLL)
-		{
-			PlayState.instance.currentChart.scrollSpeed /= TIMESCALE;
-		}
+    if (ADJUST_SCROLL)
+    {
+      PlayState.instance.currentChart.scrollSpeed /= TIMESCALE;
+    }
 
-		super.onSongLoaded(event);
-	}
+    super.onSongLoaded(event);
+  }
 
-	override function onPause(event:PauseScriptEvent):Void
-	{
-		adjustTimeScale(1.0);
-		super.onPause(event);
-	}
+  override function onPause(event:PauseScriptEvent):Void
+  {
+    adjustTimeScale(1.0);
+    super.onPause(event);
+  }
 
-	override function onResume(event:ScriptEvent):Void
-	{
-		adjustTimeScale(TIMESCALE);
-		super.onResume(event);
-	}
+  override function onResume(event:ScriptEvent):Void
+  {
+    adjustTimeScale(TIMESCALE);
+    super.onResume(event);
+  }
 
-	override function onSongEnd(event:ScriptEvent):Void
-	{
-		adjustTimeScale(1.0);
-		super.onSongEnd(event);
-	}
+  override function onSongEnd(event:ScriptEvent):Void
+  {
+    adjustTimeScale(1.0);
+    super.onSongEnd(event);
+  }
 
-	override function onGameOver(event:ScriptEvent):Void
-	{
-		adjustTimeScale(1.0);
-		super.onGameOver(event);
-	}
+  override function onGameOver(event:ScriptEvent):Void
+  {
+    adjustTimeScale(1.0);
+    super.onGameOver(event);
+  }
 
-	override function onSongRetry(event:ScriptEvent):Void
-	{
-		if (ADJUST_SCROLL)
-		{
-			PlayState.instance.currentChart.scrollSpeed *= TIMESCALE;
-		}
+  override function onSongRetry(event:ScriptEvent):Void
+  {
+    if (ADJUST_SCROLL)
+    {
+      PlayState.instance.currentChart.scrollSpeed *= TIMESCALE;
+    }
 
-		super.onSongRetry(event);
-	}
+    super.onSongRetry(event);
+  }
 
-	override function onDestroy(event:ScriptEvent):Void
-	{
-		adjustTimeScale(1.0);
+  override function onDestroy(event:ScriptEvent):Void
+  {
+    adjustTimeScale(1.0);
 
-		if (ADJUST_SCROLL && PlayState.instance != null)
-		{
-			PlayState.instance.currentChart.song.cacheCharts(true);
-		}
+    if (ADJUST_SCROLL && PlayState.instance != null)
+    {
+      PlayState.instance.currentChart.song.cacheCharts(true);
+    }
 
-		super.onDestroy(event);
-	}
+    super.onDestroy(event);
+  }
 }

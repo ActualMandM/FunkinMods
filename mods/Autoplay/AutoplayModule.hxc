@@ -15,73 +15,73 @@ import funkin.util.Constants;
  */
 class AutoplayModule extends Module
 {
-	function new()
-	{
-		super("AutoplayModule");
-	}
+  function new()
+  {
+    super("AutoplayModule");
+  }
 
-	var playerNotes:Array<SongNoteData> = [];
-	var holdData:Array<Float> = [0, 0, 0, 0];
+  var playerNotes:Array<SongNoteData> = [];
+  var holdData:Array<Float> = [0, 0, 0, 0];
 
-	override function onSongLoaded(event:SongLoadScriptEvent)
-	{
-		super.onSongLoaded(event);
+  override function onSongLoaded(event:SongLoadScriptEvent)
+  {
+    super.onSongLoaded(event);
 
-		var state:PlayState = PlayState.instance;
+    var state:PlayState = PlayState.instance;
 
-		if (state != null && !state.isBotPlayMode)
-		{
-			state.isPracticeMode = true;
+    if (state != null && !state.isBotPlayMode)
+    {
+      state.isPracticeMode = true;
 
-			playerNotes = [];
-			holdData = [0, 0, 0, 0];
+      playerNotes = [];
+      holdData = [0, 0, 0, 0];
 
-			for (note in event.notes)
-			{
-				if (note.getMustHitNote())
-				{
-					playerNotes.push(note);
-				}
-			}
-		}
-	}
+      for (note in event.notes)
+      {
+        if (note.getMustHitNote())
+        {
+          playerNotes.push(note);
+        }
+      }
+    }
+  }
 
-	override function onUpdate(event:ScriptEvent):Void
-	{
-		super.onUpdate(event);
+  override function onUpdate(event:ScriptEvent):Void
+  {
+    super.onUpdate(event);
 
-		var state:PlayState = PlayState.instance;
+    var state:PlayState = PlayState.instance;
 
-		if (state != null && !state.isGamePaused && !state.isBotPlayMode && playerNotes.length > 0)
-		{
-			var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
-			var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
+    if (state != null && !state.isGamePaused && !state.isBotPlayMode && playerNotes.length > 0)
+    {
+      var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
+      var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
 
-			for (note in playerNotes)
-			{
-				if (Conductor.instance.songPosition >= note.time)
-				{
-					if (holdData[note.data] == 0)
-					{
-						pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
-					}
+      for (note in playerNotes)
+      {
+        if (Conductor.instance.songPosition >= note.time)
+        {
+          if (holdData[note.data] == 0)
+          {
+            pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+          }
 
-					if (note.length <= 0 || holdData[note.data] >= note.length)
-					{
-						holdData[note.data] = 0;
-						playerNotes.remove(note);
+          if (note.length <= 0 || holdData[note.data] >= note.length)
+          {
+            holdData[note.data] = 0;
+            playerNotes.remove(note);
 
-						new FlxTimer().start(0.25, function(timer:FlxTimer)
-						{
-							releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
-						});
-					}
-					else
-					{
-						holdData[note.data] += (event.elapsed * 1000);
-					}
-				}
-			}
-		}
-	}
+            new FlxTimer().start(0.25, function(timer:FlxTimer)
+            {
+              releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+            });
+          }
+          else
+          {
+            holdData[note.data] += (event.elapsed * 1000);
+          }
+        }
+      }
+    }
+  }
 }

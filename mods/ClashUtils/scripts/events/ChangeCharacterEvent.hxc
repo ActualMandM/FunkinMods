@@ -11,54 +11,54 @@ import funkin.play.event.SongEvent;
  */
 class ChangeCharacterEvent extends SongEvent
 {
-	function new():Void
-	{
-		super("ChangeCharacter");
-	}
+  function new():Void
+  {
+    super("ChangeCharacter");
+  }
 
-	override function handleEvent(data:SongEventData):Void
-	{
-		// Call the changeCharacter function in the module
-		var module = ModuleHandler.getModule('ChangeCharacterModule');
-		module.scriptCall('changeCharacter', [data.value.char, data.value.target]);
-	}
+  override function handleEvent(data:SongEventData):Void
+  {
+    // Call the changeCharacter function in the module
+    var module = ModuleHandler.getModule('ChangeCharacterModule');
+    module.scriptCall('changeCharacter', [data.value.char, data.value.target]);
+  }
 
-	override function getEventSchema():SongEventSchema
-	{
-		// For some reason initializing a blank map causes an error
-		var characterMap:Map<String, String> = ["Boyfriend" => "bf"];
-		characterMap.clear();
+  override function getEventSchema():SongEventSchema
+  {
+    // For some reason initializing a blank map causes an error
+    var characterMap:Map<String, String> = ["Boyfriend" => "bf"];
+    characterMap.clear();
 
-		// Fetch all the characters in the game and add them to the map
-		for (characterId in CharacterDataParser.listCharacterIds())
-		{
-			characterMap.set(CharacterDataParser.fetchCharacterData(characterId).name, characterId);
-		}
+    // Fetch all the characters in the game and add them to the map
+    for (characterId in CharacterDataParser.listCharacterIds())
+    {
+      characterMap.set(CharacterDataParser.fetchCharacterData(characterId).name, characterId);
+    }
 
-		return [
-			{
-				name: "target",
-				title: "Target",
-				type: "enum",
-				defaultValue: CharacterType.BF,
-				keys: [
-					"Player" => CharacterType.BF,
-					"Opponent" => CharacterType.DAD,
-					"Girlfriend" => CharacterType.GF
-				]
-			},
-			{
-				name: "char",
-				title: "Character",
-				type: "enum",
-				defaultValue: "bf",
-				keys: characterMap
-			}
-		];
-	}
+    return [
+      {
+        name: "target",
+        title: "Target",
+        type: "enum",
+        defaultValue: CharacterType.BF,
+        keys: [
+          "Player" => CharacterType.BF,
+          "Opponent" => CharacterType.DAD,
+          "Girlfriend" => CharacterType.GF
+        ]
+      },
+      {
+        name: "char",
+        title: "Character",
+        type: "enum",
+        defaultValue: "bf",
+        keys: characterMap
+      }
+    ];
+  }
 
-	override function getTitle():String
-	{
-		return "Change Character";
-	}
+  override function getTitle():String
+  {
+    return "Change Character";
+  }
 }

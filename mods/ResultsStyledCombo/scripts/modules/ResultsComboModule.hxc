@@ -13,73 +13,73 @@ import funkin.play.PlayState;
  */
 class ResultsComboModule extends Module
 {
-	function new():Void
-	{
-		super("ResultsComboModule");
-	}
+  function new():Void
+  {
+    super("ResultsComboModule");
+  }
 
-	var ratingColors = [
-		"sick" => 0xFF89E59E,
-		"good" => 0xFF89C9E5,
-		"bad" => 0xFFE6CF8A,
-		"shit" => 0xFFE68C8A,
-		"miss" => 0xFFC68AE6
-	];
+  var ratingColors = [
+    "sick" => 0xFF89E59E,
+    "good" => 0xFF89C9E5,
+    "bad" => 0xFFE6CF8A,
+    "shit" => 0xFFE68C8A,
+    "miss" => 0xFFC68AE6
+  ];
 
-	var coloredCombo:Bool = false;
-	var daRating:String = "perfect";
+  var coloredCombo:Bool = false;
+  var daRating:String = "perfect";
 
-	override function onNoteHit(event:HitNoteScriptEvent):Void
-	{
-		super.onNoteHit(event);
+  override function onNoteHit(event:HitNoteScriptEvent):Void
+  {
+    super.onNoteHit(event);
 
-		if (PlayState.instance == null || !event.note.noteData.getMustHitNote())
-		{
-			return;
-		}
+    if (PlayState.instance == null || !event.note.noteData.getMustHitNote())
+    {
+      return;
+    }
 
-		daRating = event.judgement;
-		coloredCombo = false;
-	}
+    daRating = event.judgement;
+    coloredCombo = false;
+  }
 
-	override function onUpdate(event:ScriptEvent):Void
-	{
-		super.onUpdate(event);
+  override function onUpdate(event:ScriptEvent):Void
+  {
+    super.onUpdate(event);
 
-		var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
+    var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
 
-		if (PlayState.instance != null && canColor && !coloredCombo)
-		{
-			var popUpMembers = PlayState.instance.comboPopUps.members;
+    if (PlayState.instance != null && canColor && !coloredCombo)
+    {
+      var popUpMembers = PlayState.instance.comboPopUps.members;
 
-			for (i in (popUpMembers.length - getComboDigitCount())...popUpMembers.length)
-			{
-				if (Std.isOfType(popUpMembers[i], FunkinSprite))
-				{
-					popUpMembers[i].color = ratingColors.get(daRating);
-				}
-			}
+      for (i in (popUpMembers.length - getComboDigitCount())...popUpMembers.length)
+      {
+        if (Std.isOfType(popUpMembers[i], FunkinSprite))
+        {
+          popUpMembers[i].color = ratingColors.get(daRating);
+        }
+      }
 
-			coloredCombo = true;
-		}
-	}
+      coloredCombo = true;
+    }
+  }
 
-	function getComboDigitCount():Int
-	{
-		var seperatedScore:Array<Int> = [];
-		var tempCombo:Int = Highscore.tallies.combo;
+  function getComboDigitCount():Int
+  {
+    var seperatedScore:Array<Int> = [];
+    var tempCombo:Int = Highscore.tallies.combo;
 
-		while (tempCombo != 0)
-		{
-			seperatedScore.push(tempCombo % 10);
-			tempCombo = Std.int(tempCombo / 10);
-		}
+    while (tempCombo != 0)
+    {
+      seperatedScore.push(tempCombo % 10);
+      tempCombo = Std.int(tempCombo / 10);
+    }
 
-		while (seperatedScore.length < 3)
-		{
-			seperatedScore.push(0);
-		}
+    while (seperatedScore.length < 3)
+    {
+      seperatedScore.push(0);
+    }
 
-		return seperatedScore.length;
-	}
+    return seperatedScore.length;
+  }
 }

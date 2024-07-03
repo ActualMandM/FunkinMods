@@ -1,13 +1,13 @@
 {
-    "title": "Playback Rate",
-    "description": "Changes the game's playback rate.",
-	"contributors": [
-		{
-			"name": "M&M",
-			"role": "Programmer"
-		}
-	],
-    "api_version": "0.1.0",
-    "mod_version": "0.9.1",
-    "license": "Apache 2.0"
+  "title": "Playback Rate",
+  "description": "Changes the game's playback rate.",
+  "contributors": [
+    {
+      "name": "M&M",
+      "role": "Programmer"
+    }
+  ],
+  "api_version": "0.1.0",
+  "mod_version": "0.9.1",
+  "license": "Apache 2.0"
 }

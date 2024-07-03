@@ -11,23 +11,23 @@ import funkin.modding.module.Module;
  */
 class DebugDisplayModule extends Module
 {
-	function new():Void
-	{
-		super("DebugDisplayModule");
-	}
+  function new():Void
+  {
+    super("DebugDisplayModule");
+  }
 
-	override function onUpdate(event:UpdateScriptEvent):Void
-	{
-		super.onUpdate(event);
+  override function onUpdate(event:UpdateScriptEvent):Void
+  {
+    super.onUpdate(event);
 
-		// Is this efficient? No.
-		// Does it work? Yes.
-		Main.fpsCounter.visible = Preferences.debugDisplay;
-	}
+    // Is this efficient? No.
+    // Does it work? Yes.
+    Main.fpsCounter.visible = Preferences.debugDisplay;
+  }
 
-	override function onDestroy(event:ScriptEvent):Void
-	{
-		super.onDestroy(event);
-		Main.fpsCounter.visible = true;
-	}
+  override function onDestroy(event:ScriptEvent):Void
+  {
+    super.onDestroy(event);
+    Main.fpsCounter.visible = true;
+  }
 }
