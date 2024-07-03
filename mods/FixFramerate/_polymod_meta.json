@@ -1,6 +1,6 @@
 {
   "title": "Fix Framerate",
-  "description": "Makes the game use your monitor's refresh rate, alongside disabling fixed timestep.\nThese prevent the game from slowing down when under 144 fps.",
+  "description": "Makes the game use your monitor's refresh rate, alongside disabling fixed timestep.\nHelps prevent the game from slowing down when running under 144 fps.",
   "contributors": [
     {
       "name": "M&M",

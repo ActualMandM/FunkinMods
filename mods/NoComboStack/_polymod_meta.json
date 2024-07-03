@@ -1,6 +1,6 @@
 {
   "title": "No Combo Stack",
-  "description": "Makes the combo not stack on top of each other.",
+  "description": "Makes the combo counter not stack on top of the previous one.",
   "contributors": [
     {
       "name": "M&M",
