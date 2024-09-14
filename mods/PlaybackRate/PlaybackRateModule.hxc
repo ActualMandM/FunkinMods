@@ -41,8 +41,7 @@ class PlaybackRateModule extends Module
   {
     super("PlaybackRateModule");
 
-    save = new FlxSave();
-    save.bind("PlaybackRate", "MandM");
+    bindSave();
 
     if (save.data.timeScale == null)
     {
@@ -56,6 +55,8 @@ class PlaybackRateModule extends Module
 
     timeScale = save.data.timeScale / 100;
     adjustScroll = save.data.adjustScroll;
+
+    closeSave();
   }
 
   function adjustTimeScale(scale:Float):Void
