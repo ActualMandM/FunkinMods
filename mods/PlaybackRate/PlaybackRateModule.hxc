@@ -1,33 +1,61 @@
 import Std;
 import flixel.FlxG;
+import flixel.util.FlxSave;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
+import funkin.ui.options.OptionsState;
 
 /**
  * A module that changes various values to recreate the
  * Playback Rate feature that is present in various FNF engines.
  *
- * TODO:
- * Add configurable options in-game.
- *
  * @author M&M
  */
 class PlaybackRateModule extends Module
 {
-  // Modify these values to your preference
-  var TIMESCALE:float = 1.25;
-  var ADJUST_SCROLL:Bool = true;
+  var save:FlxSave = null;
+  var timeScale:Float = 1.0;
+  var adjustScroll:Bool = true;
 
+  function bindSave():Void
+  {
+    if (save == null)
+    {
+      save = new FlxSave();
+      save.bind("PlaybackRate", "MandM");
+    }
+  }
 
-  ////////////////////////////////////////
-  // Everything else below is the code! //
-  ////////////////////////////////////////
+  function closeSave():Void
+  {
+    if (save != null)
+    {
+      save.close();
+      save = null;
+    }
+  }
 
   function new():Void
   {
     super("PlaybackRateModule");
+
+    save = new FlxSave();
+    save.bind("PlaybackRate", "MandM");
+
+    if (save.data.timeScale == null)
+    {
+      save.data.timeScale = 100;
+    }
+
+    if (save.data.adjustScroll == null)
+    {
+      save.data.adjustScroll = true;
+    }
+
+    timeScale = save.data.timeScale / 100;
+    adjustScroll = save.data.adjustScroll;
   }
 
   function adjustTimeScale(scale:Float):Void
@@ -71,18 +99,43 @@ class PlaybackRateModule extends Module
   override function onStateChangeEnd(event:StateChangeScriptEvent):Void
   {
     var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
-    adjustTimeScale(isPlayState ? TIMESCALE : 1.0);
+    var isOptions:Bool = Std.isOfType(event.targetState, OptionsState);
+
+    adjustTimeScale(isPlayState ? timeScale : 1.0);
+
+    if (isOptions)
+    {
+      bindSave();
+
+      var prefs = event.targetState.pages.get("preferences");
+
+      prefs.createPrefItemPercentage("Playback Rate", "", function(value)
+      {
+        save.data.timeScale = value;
+        timeScale = value / 100;
+      }, save.data.timeScale, 50, 300);
+
+      prefs.createPrefItemCheckbox("Adjust Scroll", "", function(value)
+      {
+        save.data.adjustScroll = value;
+        adjustScroll = value;
+      }, save.data.adjustScroll);
+    }
+    else
+    {
+      closeSave();
+    }
 
     super.onStateChangeEnd(event);
   }
 
   override function onSongLoaded(event:SongLoadScriptEvent):Void
   {
-    adjustTimeScale(TIMESCALE);
+    adjustTimeScale(timeScale);
 
-    if (ADJUST_SCROLL)
+    if (adjustScroll)
     {
-      PlayState.instance.currentChart.scrollSpeed /= TIMESCALE;
+      PlayState.instance.currentChart.scrollSpeed /= timeScale;
     }
 
     super.onSongLoaded(event);
@@ -96,7 +149,7 @@ class PlaybackRateModule extends Module
 
   override function onResume(event:ScriptEvent):Void
   {
-    adjustTimeScale(TIMESCALE);
+    adjustTimeScale(timeScale);
     super.onResume(event);
   }
 
@@ -114,9 +167,9 @@ class PlaybackRateModule extends Module
 
   override function onSongRetry(event:ScriptEvent):Void
   {
-    if (ADJUST_SCROLL)
+    if (adjustScroll)
     {
-      PlayState.instance.currentChart.scrollSpeed *= TIMESCALE;
+      PlayState.instance.currentChart.scrollSpeed *= timeScale;
     }
 
     super.onSongRetry(event);
@@ -126,7 +179,7 @@ class PlaybackRateModule extends Module
   {
     adjustTimeScale(1.0);
 
-    if (ADJUST_SCROLL && PlayState.instance != null)
+    if (adjustScroll && PlayState.instance != null)
     {
       PlayState.instance.currentChart.song.cacheCharts(true);
     }
