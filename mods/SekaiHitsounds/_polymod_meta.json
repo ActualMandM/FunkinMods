@@ -1,6 +1,6 @@
 {
-  "title": "Project Sekai Hitsounds",
-  "description": "Plays a hitsound from Project Sekai whenever you press a note.",
+  "title": "Project SEKAI Hitsounds",
+  "description": "Plays a hitsound from Project SEKAI whenever you press a note.",
   "contributors": [
     {
       "name": "M&M",
@@ -8,10 +8,10 @@
     },
     {
       "name": "SEGA, Colorful Palette",
-      "role": "Project Sekai"
+      "role": "Project SEKAI COLORFUL STAGE! feat. Hatsune Miku"
     }
   ],
   "api_version": "0.5.0",
-  "mod_version": "1.0.1",
+  "mod_version": "1.1.0",
   "license": "Apache 2.0"
 }

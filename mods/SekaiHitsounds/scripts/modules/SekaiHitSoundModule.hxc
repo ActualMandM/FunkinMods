@@ -1,9 +1,12 @@
+import Std;
 import flixel.FlxG;
+import flixel.util.FlxSave;
 import funkin.Paths;
 import funkin.audio.FunkinSound;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
+import funkin.ui.options.OptionsState;
 
 /**
  * A module that plays a sound whenever a note is hit.
@@ -21,24 +24,74 @@ class SekaiHitSoundModule extends Module
     "shit" => "good"
   ];
 
-  function new()
+  var save:FlxSave = null;
+  var volume:Float = 0.8;
+
+  function bindSave():Void
   {
-    super("SekaiHitSoundModule");
+    if (save == null)
+    {
+      save = new FlxSave();
+      save.bind("SekaiHitSound", "MandM");
+    }
   }
 
-  function onStateChangeEnd(event)
+  function closeSave():Void
   {
+    if (save != null)
+    {
+      save.close();
+      save = null;
+    }
+  }
+
+  function new():Void
+  {
+    super("SekaiHitSoundModule");
+
+    bindSave();
+
+    if (save.data.volume == null)
+    {
+      save.data.volume = 80;
+    }
+
+    volume = save.data.volume / 100;
+
+    closeSave();
+  }
+
+  function onStateChangeEnd(event):Void
+  {
+    var isPlayState:Bool = Std.isOfType(event.targetState, PlayState);
+    var isOptions:Bool = Std.isOfType(event.targetState, OptionsState);
+
+    if (isOptions)
+    {
+      bindSave();
+
+      var prefs = event.targetState.pages.get("preferences");
+
+      prefs.createPrefItemPercentage("Hitsound Volume", "", function(value)
+      {
+        save.data.volume = value;
+        volume = value / 100;
+      }, save.data.volume);
+    }
+    else
+    {
+      closeSave();
+
+      if (isPlayState)
+      {
+        for (audio in HITSOUNDS)
+        {
+          FlxG.sound.cache(Paths.sound('hitsound/' + audio));
+        }
+      }
+    }
+
     super.onStateChangeEnd(event);
-
-    if (!Std.isOfType(event.targetState, PlayState))
-    {
-      return;
-    }
-
-    for (audio in HITSOUNDS)
-    {
-      FlxG.sound.cache(Paths.sound('hitsound/' + audio));
-    }
   }
 
   override function onNoteHit(event:HitNoteScriptEvent):Void
@@ -50,6 +103,6 @@ class SekaiHitSoundModule extends Module
       return;
     }
 
-    FunkinSound.playOnce(Paths.sound('hitsound/' + HITSOUNDS.get(event.judgement)), 0.8);
+    FunkinSound.playOnce(Paths.sound('hitsound/' + HITSOUNDS.get(event.judgement)), volume);
   }
 }

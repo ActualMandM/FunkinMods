@@ -116,7 +116,7 @@ class PlaybackRateModule extends Module
         timeScale = value / 100;
       }, save.data.timeScale, 50, 300);
 
-      prefs.createPrefItemCheckbox("Adjust Scroll", "", function(value)
+      prefs.createPrefItemCheckbox("Adjust Scroll Speed", "", function(value)
       {
         save.data.adjustScroll = value;
         adjustScroll = value;
