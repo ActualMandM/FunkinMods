@@ -25,6 +25,7 @@ class SekaiHitSoundModule extends Module
   ];
 
   var save:FlxSave = null;
+  var folder:String = "sekai01";
   var volume:Float = 0.8;
 
   function bindSave():Void
@@ -51,11 +52,17 @@ class SekaiHitSoundModule extends Module
 
     bindSave();
 
+    if (save.data.folder == null)
+    {
+      save.data.folder = "sekai01";
+    }
+
     if (save.data.volume == null)
     {
       save.data.volume = 80;
     }
 
+    folder = save.data.folder;
     volume = save.data.volume / 100;
 
     closeSave();
@@ -72,7 +79,18 @@ class SekaiHitSoundModule extends Module
 
       var prefs = event.targetState.pages.get("preferences");
 
-      prefs.createPrefItemPercentage("Hitsound Volume", "", function(value)
+      prefs.createPrefItemEnum("Hitsound Type", "Change what the hitsound sounds like.",
+      [
+        "sekai01" => "Sekai #1",
+        "sekai02" => "Sekai #2"
+      ],
+      function(value)
+      {
+        save.data.folder = value;
+        folder = value;
+      }, save.data.folder);
+
+      prefs.createPrefItemPercentage("Hitsound Volume", "Change the loudness of the hitsound.", function(value)
       {
         save.data.volume = value;
         volume = value / 100;
@@ -86,7 +104,7 @@ class SekaiHitSoundModule extends Module
       {
         for (audio in HITSOUNDS)
         {
-          FlxG.sound.cache(Paths.sound('hitsound/' + audio));
+          FlxG.sound.cache(Paths.sound(getHitSoundPath(audio)));
         }
       }
     }
@@ -103,6 +121,11 @@ class SekaiHitSoundModule extends Module
       return;
     }
 
-    FunkinSound.playOnce(Paths.sound('hitsound/' + HITSOUNDS.get(event.judgement)), volume);
+    FunkinSound.playOnce(Paths.sound(getHitSoundPath(HITSOUNDS.get(event.judgement))), volume);
+  }
+
+  function getHitSoundPath(type:String = "perfect"):String
+  {
+    return 'hitsound/' + folder + '/' + type;
   }
 }
