@@ -17,7 +17,7 @@ class SekaiHitSoundModule extends Module
 {
   var HITSOUNDS = [
     "perfect" => "perfect",
-    "killer" => "perfect",
+    "killer" => "perfect", // https://youtu.be/BSi88nRijoA
     "sick" => "perfect",
     "good" => "great",
     "bad" => "good",
@@ -77,12 +77,12 @@ class SekaiHitSoundModule extends Module
     {
       bindSave();
 
-      var prefs = event.targetState.pages.get("preferences");
+      var prefs = event.targetState.optionsCodex.pages.get("preferences");
 
       prefs.createPrefItemEnum("Hitsound Type", "Change what the hitsound sounds like.",
       [
-        "sekai01" => "Sekai #1",
-        "sekai02" => "Sekai #2"
+        "Sekai #1" => "sekai01",
+        "Sekai #2" => "sekai02"
       ],
       function(value)
       {

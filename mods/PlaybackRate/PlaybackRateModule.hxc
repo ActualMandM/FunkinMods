@@ -108,15 +108,15 @@ class PlaybackRateModule extends Module
     {
       bindSave();
 
-      var prefs = event.targetState.pages.get("preferences");
+      var prefs = event.targetState.optionsCodex.pages.get("preferences");
 
-      prefs.createPrefItemPercentage("Playback Rate", "", function(value)
+      prefs.createPrefItemPercentage("Playback Rate", "Changes how fast or slow the song plays at.", function(value)
       {
         save.data.timeScale = value;
         timeScale = value / 100;
       }, save.data.timeScale, 50, 300);
 
-      prefs.createPrefItemCheckbox("Adjust Scroll Speed", "", function(value)
+      prefs.createPrefItemCheckbox("Adjust Scroll Speed", "If enabled, the note spacing will be adjusted according to the song speed.", function(value)
       {
         save.data.adjustScroll = value;
         adjustScroll = value;
