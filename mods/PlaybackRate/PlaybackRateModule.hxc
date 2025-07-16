@@ -1,10 +1,10 @@
 import Std;
 import flixel.FlxG;
-import flixel.util.FlxSave;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
+import funkin.save.Save;
 import funkin.ui.options.OptionsState;
 
 /**
@@ -19,44 +19,37 @@ class PlaybackRateModule extends Module
   var timeScale:Float = 1.0;
   var adjustScroll:Bool = true;
 
-  function bindSave():Void
-  {
-    if (save == null)
-    {
-      save = new FlxSave();
-      save.bind("PlaybackRate", "MandM");
-    }
-  }
-
-  function closeSave():Void
-  {
-    if (save != null)
-    {
-      save.close();
-      save = null;
-    }
-  }
+  var options:Dynamic = {
+    timeScale: 100,
+    adjustScroll: true
+  };
 
   function new():Void
   {
     super("PlaybackRateModule");
 
-    bindSave();
-
-    if (save.data.timeScale == null)
+    if (Save.instance.modOptions.get("mandm.playbackrate") == null)
     {
-      save.data.timeScale = 100;
+      Save.instance.modOptions.set("mandm.playbackrate", options);
+      Save.instance.flush();
+    }
+    else
+    {
+      options = Save.instance.modOptions.get("mandm.playbackrate");
     }
 
-    if (save.data.adjustScroll == null)
+    if (options.timeScale == null)
     {
-      save.data.adjustScroll = true;
+      options.timeScale = 100;
     }
 
-    timeScale = save.data.timeScale / 100;
-    adjustScroll = save.data.adjustScroll;
+    if (options.adjustScroll == null)
+    {
+      options.adjustScroll = true;
+    }
 
-    closeSave();
+    timeScale = options.timeScale / 100;
+    adjustScroll = options.adjustScroll;
   }
 
   function adjustTimeScale(scale:Float):Void
@@ -106,25 +99,24 @@ class PlaybackRateModule extends Module
 
     if (isOptions)
     {
-      bindSave();
-
       var prefs = event.targetState.optionsCodex.pages.get("preferences");
 
       prefs.createPrefItemPercentage("Playback Rate", "Changes how fast or slow the song plays at.", function(value)
       {
-        save.data.timeScale = value;
+        options.timeScale = value;
         timeScale = value / 100;
-      }, save.data.timeScale, 50, 300);
+      }, options.timeScale, 50, 300);
 
       prefs.createPrefItemCheckbox("Adjust Scroll Speed", "If enabled, the note spacing will be adjusted according to the song speed.", function(value)
       {
-        save.data.adjustScroll = value;
+        options.adjustScroll = value;
         adjustScroll = value;
-      }, save.data.adjustScroll);
+      }, options.adjustScroll);
     }
     else
     {
-      closeSave();
+      Save.instance.modOptions.set("mandm.playbackrate", options);
+      Save.instance.flush();
     }
 
     super.onStateChangeEnd(event);

@@ -1,11 +1,11 @@
 import Std;
 import flixel.FlxG;
-import flixel.util.FlxSave;
 import funkin.Paths;
 import funkin.audio.FunkinSound;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
+import funkin.save.Save;
 import funkin.ui.options.OptionsState;
 
 /**
@@ -15,7 +15,7 @@ import funkin.ui.options.OptionsState;
  */
 class SekaiHitSoundModule extends Module
 {
-  var HITSOUNDS = [
+  var HITSOUNDS:Dynamic = [
     "perfect" => "perfect",
     "killer" => "perfect", // https://youtu.be/BSi88nRijoA
     "sick" => "perfect",
@@ -28,44 +28,42 @@ class SekaiHitSoundModule extends Module
   var folder:String = "sekai01";
   var volume:Float = 0.8;
 
-  function bindSave():Void
-  {
-    if (save == null)
-    {
-      save = new FlxSave();
-      save.bind("SekaiHitSound", "MandM");
-    }
-  }
+  var options:Dynamic = {
+    folder: "Sekai #1",
+    volume: 80
+  };
 
-  function closeSave():Void
-  {
-    if (save != null)
-    {
-      save.close();
-      save = null;
-    }
-  }
+  var folderNames:Dynamic = [
+    "Sekai #1" => "sekai01",
+    "Sekai #2" => "sekai02"
+  ];
 
   function new():Void
   {
     super("SekaiHitSoundModule");
 
-    bindSave();
-
-    if (save.data.folder == null)
+    if (Save.instance.modOptions.get("mandm.sekaihitsound") == null)
     {
-      save.data.folder = "sekai01";
+      Save.instance.modOptions.set("mandm.sekaihitsound", options);
+      Save.instance.flush();
+    }
+    else
+    {
+      options = Save.instance.modOptions.get("mandm.sekaihitsound");
     }
 
-    if (save.data.volume == null)
+    if (options.folder == null)
     {
-      save.data.volume = 80;
+      options.folder = "Sekai #1";
     }
 
-    folder = save.data.folder;
-    volume = save.data.volume / 100;
+    if (options.volume == null)
+    {
+      options.volume = 80;
+    }
 
-    closeSave();
+    folder = folderNames.get(options.folder);
+    volume = options.volume / 100;
   }
 
   function onStateChangeEnd(event):Void
@@ -75,30 +73,24 @@ class SekaiHitSoundModule extends Module
 
     if (isOptions)
     {
-      bindSave();
-
       var prefs = event.targetState.optionsCodex.pages.get("preferences");
 
-      prefs.createPrefItemEnum("Hitsound Type", "Change what the hitsound sounds like.",
-      [
-        "Sekai #1" => "sekai01",
-        "Sekai #2" => "sekai02"
-      ],
-      function(value)
+      prefs.createPrefItemEnum("Hitsound Type", "Change what the hitsound sounds like.", folderNames, function(value)
       {
-        save.data.folder = value;
-        folder = value;
-      }, save.data.folder);
+        options.folder = value;
+        folder = folderNames.get(value);
+      }, options.folder);
 
       prefs.createPrefItemPercentage("Hitsound Volume", "Change the loudness of the hitsound.", function(value)
       {
-        save.data.volume = value;
+        options.volume = value;
         volume = value / 100;
-      }, save.data.volume);
+      }, options.volume);
     }
     else
     {
-      closeSave();
+      Save.instance.modOptions.set("mandm.sekaihitsound", options);
+      Save.instance.flush();
 
       if (isPlayState)
       {
