@@ -5,6 +5,7 @@ import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
+import funkin.play.stage.Stage;
 import funkin.util.Constants;
 
 /**
