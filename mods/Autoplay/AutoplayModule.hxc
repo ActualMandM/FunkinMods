@@ -52,7 +52,7 @@ class AutoplayModule extends Module
 
     var state:PlayState = PlayState.instance;
 
-    if (state != null && !state.isGamePaused && !state.isBotPlayMode && playerNotes.length > 0)
+    if (playerNotes.length > 0 && state != null && !state.isGamePaused && !state.isBotPlayMode)
     {
       var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
       var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
@@ -78,7 +78,14 @@ class AutoplayModule extends Module
           }
           else
           {
-            holdData[note.data] += (event.elapsed * 1000);
+            holdData[note.data] += (event.elapsed * Constants.MS_PER_SEC);
+
+            var stage:Stage = state.currentStage;
+
+            if (stage != null && stage.getBoyfriend() != null && stage.getBoyfriend().isSinging())
+            {
+              stage.getBoyfriend().holdTimer = 0; // Base Funkin' does this too for their botplay.
+            }
           }
         }
       }
