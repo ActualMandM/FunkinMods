@@ -67,12 +67,12 @@ class AutoplayModule extends Module
             pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
           }
 
-          if (note.length <= 0 || holdData[note.data] >= note.length)
+          if (note.length == 0 || holdData[note.data] >= note.length)
           {
             holdData[note.data] = 0;
             playerNotes.remove(note);
 
-            new FlxTimer().start(0.25, function(timer:FlxTimer)
+            new FlxTimer().start(0.1, function(timer:FlxTimer)
             {
               releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
             });
@@ -85,7 +85,7 @@ class AutoplayModule extends Module
 
             if (stage != null && stage.getBoyfriend() != null && stage.getBoyfriend().isSinging())
             {
-              stage.getBoyfriend().holdTimer = 0; // Base Funkin' does this too for their botplay.
+              stage.getBoyfriend().holdTimer = 0;
             }
           }
         }
