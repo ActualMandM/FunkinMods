@@ -15,7 +15,6 @@ import funkin.ui.options.OptionsState;
  */
 class PlaybackRateModule extends Module
 {
-  var save:FlxSave = null;
   var timeScale:Float = 1.0;
   var adjustScroll:Bool = true;
 
