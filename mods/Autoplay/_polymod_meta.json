@@ -1,6 +1,6 @@
 {
   "title": "Autoplay",
-  "description": "Automatically plays the game with perfect timing.",
+  "description": "Automatically plays songs with perfect timing.",
   "contributors": [
     {
       "name": "M&M",
@@ -8,6 +8,6 @@
     }
   ],
   "api_version": "0.7.0",
-  "mod_version": "1.0.3",
+  "mod_version": "1.0.4",
   "license": "Apache 2.0"
 }

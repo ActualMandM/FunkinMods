@@ -6,6 +6,8 @@ import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.scoring.Scoring;
 import funkin.play.stage.Stage;
+import funkin.save.Save;
+import funkin.ui.options.OptionsState;
 import funkin.util.Constants;
 
 /**
@@ -16,9 +18,53 @@ import funkin.util.Constants;
  */
 class AutoplayModule extends Module
 {
+  var enabled:Bool = true;
+
+  var options:Dynamic = {
+    enabled: true
+  };
+
   function new()
   {
     super("AutoplayModule");
+
+    if (Save.instance.modOptions.get("mandm.autoplay") == null)
+    {
+      Save.instance.modOptions.set("mandm.autoplay", options);
+      Save.instance.flush();
+    }
+    else
+    {
+      options = Save.instance.modOptions.get("mandm.autoplay");
+    }
+
+    if (options.enabled == null)
+    {
+      options.enabled = true;
+    }
+
+    enabled = options.enabled;
+  }
+
+  override function onStateChangeEnd(event:StateChangeScriptEvent):Void
+  {
+    if (Std.isOfType(event.targetState, OptionsState))
+    {
+      var prefs = event.targetState.optionsCodex.pages.get("preferences");
+
+      prefs.createPrefItemCheckbox("Autoplay", "If enabled, songs will be played automatically.\nScores will not be saved with autoplay enabled.", function(value)
+      {
+        options.enabled = value;
+        enabled = value;
+      }, options.enabled);
+    }
+    else
+    {
+      Save.instance.modOptions.set("mandm.autoplay", options);
+      Save.instance.flush();
+    }
+
+    super.onStateChangeEnd(event);
   }
 
   var playerNotes:Array<SongNoteData> = [];
@@ -28,20 +74,23 @@ class AutoplayModule extends Module
   {
     super.onSongLoaded(event);
 
-    var state:PlayState = PlayState.instance;
-
-    if (state != null && !state.isBotPlayMode)
+    if (enabled)
     {
-      state.isPracticeMode = true;
+      var state:PlayState = PlayState.instance;
 
-      playerNotes = [];
-      holdData = [0, 0, 0, 0];
-
-      for (note in event.notes)
+      if (state != null && !state.isBotPlayMode)
       {
-        if (note.getMustHitNote())
+        state.isPracticeMode = true;
+
+        playerNotes = [];
+        holdData = [0, 0, 0, 0];
+
+        for (note in event.notes)
         {
-          playerNotes.push(note);
+          if (note.getMustHitNote())
+          {
+            playerNotes.push(note);
+          }
         }
       }
     }
@@ -51,41 +100,44 @@ class AutoplayModule extends Module
   {
     super.onUpdate(event);
 
-    var state:PlayState = PlayState.instance;
-
-    if (playerNotes.length > 0 && state != null && !state.isGamePaused && !state.isBotPlayMode)
+    if (enabled)
     {
-      var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
-      var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
+      var state:PlayState = PlayState.instance;
 
-      for (note in playerNotes)
+      if (playerNotes.length > 0 && state != null && !state.isGamePaused && !state.isBotPlayMode)
       {
-        if (Conductor.instance.songPosition >= note.time)
+        var pressQueue:Array<PreciseInputEvent> = state.inputPressQueue;
+        var releaseQueue:Array<PreciseInputEvent> = state.inputReleaseQueue;
+
+        for (note in playerNotes)
         {
-          if (holdData[note.data] == 0)
+          if (Conductor.instance.songPosition >= note.time)
           {
-            pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
-          }
-
-          if (note.length == 0 || holdData[note.data] >= note.length)
-          {
-            holdData[note.data] = 0;
-            playerNotes.remove(note);
-
-            new FlxTimer().start(0.1, function(timer:FlxTimer)
+            if (holdData[note.data] == 0)
             {
-              releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
-            });
-          }
-          else
-          {
-            holdData[note.data] += (event.elapsed * Constants.MS_PER_SEC);
+              pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+            }
 
-            var stage:Stage = state.currentStage;
-
-            if (stage != null && stage.getBoyfriend() != null && stage.getBoyfriend().isSinging())
+            if (note.length == 0 || holdData[note.data] >= note.length)
             {
-              stage.getBoyfriend().holdTimer = 0;
+              holdData[note.data] = 0;
+              playerNotes.remove(note);
+
+              new FlxTimer().start(0.1, function(timer:FlxTimer)
+              {
+                releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
+              });
+            }
+            else
+            {
+              holdData[note.data] += (event.elapsed * Constants.MS_PER_SEC);
+
+              var stage:Stage = state.currentStage;
+
+              if (stage != null && stage.getBoyfriend() != null && stage.getBoyfriend().isSinging())
+              {
+                stage.getBoyfriend().holdTimer = 0;
+              }
             }
           }
         }
