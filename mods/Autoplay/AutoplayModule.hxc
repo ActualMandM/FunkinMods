@@ -123,7 +123,7 @@ class AutoplayModule extends Module
               holdData[note.data] = 0;
               playerNotes.remove(note);
 
-              new FlxTimer().start(0.1, function(timer:FlxTimer)
+              new FlxTimer().start(note.length == 0 ? (3 / 24) : 0, function(timer:FlxTimer)
               {
                 releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
               });
