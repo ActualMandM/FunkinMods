@@ -1,5 +1,6 @@
 import Std;
 import flixel.FlxG;
+import funkin.FunkinMemory;
 import funkin.Paths;
 import funkin.audio.FunkinSound;
 import funkin.modding.events.ScriptEvent;
@@ -96,7 +97,7 @@ class SekaiHitSoundModule extends Module
       {
         for (audio in HITSOUNDS)
         {
-          FlxG.sound.cache(Paths.sound(getHitSoundPath(audio)));
+          FunkinMemory.cacheSound(Paths.sound(getHitSoundPath(audio)));
         }
       }
     }
