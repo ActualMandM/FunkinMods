@@ -1,4 +1,3 @@
-import flixel.util.FlxTimer;
 import funkin.Conductor;
 import funkin.input.PreciseInputManager;
 import funkin.modding.events.ScriptEvent;
@@ -89,7 +88,9 @@ class AutoplayModule extends Module
         {
           if (note.getMustHitNote())
           {
-            playerNotes.push(note);
+            var apNote:SongNoteData = note.clone();
+            if (apNote.length == 0) apNote.length += (3 / 24) * 1000;
+            playerNotes.push(apNote);
           }
         }
       }
@@ -118,15 +119,11 @@ class AutoplayModule extends Module
               pressQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
             }
 
-            if (note.length == 0 || holdData[note.data] >= note.length)
+            if (holdData[note.data] >= note.length)
             {
               holdData[note.data] = 0;
               playerNotes.remove(note);
-
-              new FlxTimer().start(note.length == 0 ? (3 / 24) : 0, function(timer:FlxTimer)
-              {
-                releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
-              });
+              releaseQueue.push({noteDirection: note.data, timestamp: PreciseInputManager.getCurrentTimestamp()});
             }
             else
             {
