@@ -15,7 +15,7 @@ class ResultsComboModule extends Module
 {
   function new():Void
   {
-    super("ResultsComboModule");
+    super("ResultsComboModule", {state: PlayState});
   }
 
   var ratingColors = [
@@ -42,13 +42,17 @@ class ResultsComboModule extends Module
     coloredCombo = false;
   }
 
+  var noteStyles:Array<String> = ["funkin", "pixel"];
+
   override function onUpdate(event:ScriptEvent):Void
   {
     super.onUpdate(event);
 
-    var canColor:Bool = Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0;
+    if (PlayState.instance == null) return;
 
-    if (PlayState.instance != null && canColor && !coloredCombo)
+    var canColor:Bool = noteStyles.contains(PlayState.instance.noteStyle.id) && (Highscore.tallies.combo >= 10 || Highscore.tallies.combo == 0);
+
+    if (canColor && !coloredCombo)
     {
       var popUpMembers = PlayState.instance.comboPopUps.members;
 
