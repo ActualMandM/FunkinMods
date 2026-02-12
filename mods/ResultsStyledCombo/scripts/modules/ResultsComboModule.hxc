@@ -9,7 +9,7 @@ import funkin.play.PlayState;
  * A module that colors the numScore sprites
  * according to the judgement that you were given.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class ResultsComboModule extends Module
 {

@@ -14,7 +14,7 @@ import funkin.play.stage.Stage;
  * A module that has all the code necessary
  * to make mid-song character changes possible.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class ChangeCharacterModule extends Module
 {

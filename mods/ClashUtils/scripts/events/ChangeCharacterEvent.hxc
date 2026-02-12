@@ -7,7 +7,7 @@ import funkin.play.event.SongEvent;
  * An event that sets up values necessary
  * for changing characters mid-song.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class ChangeCharacterEvent extends SongEvent
 {

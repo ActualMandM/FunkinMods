@@ -11,7 +11,7 @@ import funkin.ui.options.OptionsState;
  * A module that changes various values to recreate the
  * Playback Rate feature that is present in various FNF engines.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class PlaybackRateModule extends Module
 {

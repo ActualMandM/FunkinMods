@@ -13,7 +13,7 @@ import funkin.util.Constants;
  * A module that automatically presses notes
  * in PlayState with perfect timing.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class AutoplayModule extends Module
 {

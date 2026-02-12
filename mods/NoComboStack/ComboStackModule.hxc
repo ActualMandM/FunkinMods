@@ -8,7 +8,7 @@ import funkin.play.PlayState;
  * A module that deletes previous comboPopUps
  * sprites whenever a note is hit.
  *
- * @author M&M
+ * @author RagdollClash
  */
 class ComboStackModule extends Module
 {
