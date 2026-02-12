@@ -1,0 +1,25 @@
+import flixel.FlxG;
+import flixel.math.FlxPoint;
+import funkin.modding.module.Module;
+import funkin.ui.FullScreenScaleMode;
+
+/**
+ * A module that increases the game's maximum aspect ratio.
+ * Will introduce visual issues past the original max of 20:9.
+ *
+ * @author RagdollClash
+ */
+class UltrawideModule extends Module
+{
+  function new():Void
+  {
+    super("UltrawideModule");
+  }
+
+  override function onCreate(event:ScriptEvent):Void
+  {
+    super.onCreate(event);
+    FullScreenScaleMode.maxAspectRatio = FlxPoint.get(43, 18); // 3440x1440
+    FullScreenScaleMode.enabled = true;
+  }
+}
