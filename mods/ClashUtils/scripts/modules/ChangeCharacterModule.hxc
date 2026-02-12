@@ -1,6 +1,6 @@
 import Std;
+import funkin.FunkinMemory;
 import funkin.Paths;
-import funkin.graphics.FunkinSprite;
 import funkin.modding.events.ScriptEvent;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
@@ -49,7 +49,15 @@ class ChangeCharacterModule extends Module
         {
           // Cache assets so the game doesn't stutter when character changes
           var characterData = CharacterDataParser.fetchCharacterData(event.value.char);
-          FunkinSprite.cacheTexture(Paths.image(characterData.assetPath));
+          FunkinMemory.cacheTexture(Paths.image(characterData.assetPath));
+
+          for (animation in characterData.animations)
+          {
+            if (animation.assetPath != null)
+            {
+              FunkinMemory.cacheTexture(Paths.image(animation.assetPath));
+            }
+          }
         }
       }
 
