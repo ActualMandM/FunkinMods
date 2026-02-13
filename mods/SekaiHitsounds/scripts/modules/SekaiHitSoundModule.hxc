@@ -16,7 +16,7 @@ import funkin.ui.options.OptionsState;
  */
 class SekaiHitSoundModule extends Module
 {
-  var HITSOUNDS:Dynamic = [
+  final HITSOUNDS:Dynamic = [
     "perfect" => "perfect",
     "killer" => "perfect", // https://youtu.be/BSi88nRijoA
     "sick" => "perfect",
@@ -93,7 +93,7 @@ class SekaiHitSoundModule extends Module
       Save.instance.modOptions.set("mandm.sekaihitsound", options);
       Save.instance.flush();
 
-      if (isPlayState)
+      if (isPlayState && volume > 0)
       {
         for (audio in HITSOUNDS)
         {
@@ -109,7 +109,7 @@ class SekaiHitSoundModule extends Module
   {
     super.onNoteHit(event);
 
-    if (PlayState.instance == null || !event.note.noteData.getMustHitNote() || !HITSOUNDS.exists(event.judgement))
+    if (PlayState.instance == null || !event.note.noteData.getMustHitNote() || !HITSOUNDS.exists(event.judgement) || volume == 0)
     {
       return;
     }
