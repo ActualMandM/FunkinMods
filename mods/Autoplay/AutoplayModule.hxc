@@ -86,7 +86,7 @@ class AutoplayModule extends Module
 
         for (note in event.notes)
         {
-          if (note.getMustHitNote())
+          if (note.getMustHitNote() && note.time >= state.startTimestamp)
           {
             var apNote:SongNoteData = note.clone();
             if (apNote.length == 0) apNote.length += (3 / 24) * 1000;
